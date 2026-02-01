@@ -701,9 +701,9 @@ const ActionFooter = ({ onExit, onInclude, onSave, onAlter, onDelete, isTableEmp
     <button
       id="btn-incluir"
       onClick={onInclude}
-      disabled={isDeletingConfirmation}
-      title={isDeletingConfirmation ? "Botão desabilitado durante exclusão" : "Limpar todos os campos e preparar para um novo cadastro"}
-      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-green-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] active:scale-95 shadow-lg group ${isDeletingConfirmation ? 'opacity-50 cursor-not-allowed' : ''}`}
+      disabled={isDeletingConfirmation || isEditing}
+      title={isDeletingConfirmation ? "Botão desabilitado durante exclusão" : (isEditing ? "Conclua a edição atual antes de incluir novo" : "Limpar todos os campos e preparar para um novo cadastro")}
+      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-green-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] active:scale-95 shadow-lg group ${(isDeletingConfirmation || isEditing) ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <Plus size={18} className="text-white group-hover:rotate-90 transition-transform" />
       <span className="font-bold text-xs uppercase tracking-wider">INCLUIR</span>
@@ -729,9 +729,9 @@ const ActionFooter = ({ onExit, onInclude, onSave, onAlter, onDelete, isTableEmp
     </button>
     <button
       onClick={onDelete}
-      disabled={isTableEmpty || isDeletingConfirmation || isAddingNew}
-      title={isDeletingConfirmation ? "Botão desabilitado durante exclusão" : (isAddingNew ? "Conclua a inclusão atual antes de excluir" : "Excluir permanentemente o registro selecionado")}
-      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-red-700 to-rose-600 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] active:scale-95 shadow-lg group ${(isTableEmpty || isDeletingConfirmation || isAddingNew) ? 'opacity-50 cursor-not-allowed' : ''}`}
+      disabled={isTableEmpty || isDeletingConfirmation || isAddingNew || isEditing}
+      title={isDeletingConfirmation ? "Botão desabilitado durante exclusão" : (isAddingNew || isEditing ? "Conclua a ação atual antes de excluir" : "Excluir permanentemente o registro selecionado")}
+      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-red-700 to-rose-600 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] active:scale-95 shadow-lg group ${(isTableEmpty || isDeletingConfirmation || isAddingNew || isEditing) ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <Trash2 size={18} className="text-white group-hover:scale-110 transition-transform" />
       <span className="font-bold text-xs uppercase tracking-wider">EXCLUIR</span>
