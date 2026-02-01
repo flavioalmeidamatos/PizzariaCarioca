@@ -421,9 +421,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       </div>
       {
         renderGenericTable(
-          ["ID", "Produto", "Categoria", "Preço", "Status"],
+          ["ID", "Cód. Barras", "Produto", "Categoria", "Preço", "Status"],
           products.map(p => ({
             id: p.id_consumer || '---',
+            barcode: p.codigo_barras || '---',
             prod: p.nome_produto,
             cat: p.categoria || 'Geral',
             price: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(p.preco || 0),
