@@ -719,18 +719,18 @@ const ActionFooter = ({ onExit, onInclude, onSave, onAlter, onDelete, isTableEmp
     </button>
     <button
       onClick={onAlter}
-      disabled={isTableEmpty || isDeletingConfirmation}
-      title={isDeletingConfirmation ? "Botão desabilitado durante exclusão" : "Habilitar edição para o registro selecionado"}
-      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-amber-600 to-yellow-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] active:scale-95 shadow-lg group ${(isTableEmpty || isDeletingConfirmation) ? 'opacity-50 cursor-not-allowed' : ''}`}
+      disabled={isTableEmpty || isDeletingConfirmation || isAddingNew}
+      title={isDeletingConfirmation ? "Botão desabilitado durante exclusão" : (isAddingNew ? "Conclua a inclusão atual antes de alterar" : "Habilitar edição para o registro selecionado")}
+      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-amber-600 to-yellow-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] active:scale-95 shadow-lg group ${(isTableEmpty || isDeletingConfirmation || isAddingNew) ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <Edit size={18} className="text-white group-hover:-rotate-12 transition-transform" />
       <span className="font-bold text-xs uppercase tracking-wider">ALTERAR</span>
     </button>
     <button
       onClick={onDelete}
-      disabled={isTableEmpty || isDeletingConfirmation}
-      title={isDeletingConfirmation ? "Botão desabilitado durante exclusão" : "Excluir permanentemente o registro selecionado"}
-      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-red-700 to-rose-600 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] active:scale-95 shadow-lg group ${(isTableEmpty || isDeletingConfirmation) ? 'opacity-50 cursor-not-allowed' : ''}`}
+      disabled={isTableEmpty || isDeletingConfirmation || isAddingNew}
+      title={isDeletingConfirmation ? "Botão desabilitado durante exclusão" : (isAddingNew ? "Conclua a inclusão atual antes de excluir" : "Excluir permanentemente o registro selecionado")}
+      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-red-700 to-rose-600 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] active:scale-95 shadow-lg group ${(isTableEmpty || isDeletingConfirmation || isAddingNew) ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <Trash2 size={18} className="text-white group-hover:scale-110 transition-transform" />
       <span className="font-bold text-xs uppercase tracking-wider">EXCLUIR</span>
