@@ -1,0 +1,5 @@
+{
+  "name": "Pizzaria Carioca",
+  "description": "Sistema de gestão completo para pizzarias com controle de Estoque, Vendas e Dashboard Financeiro.",
+  "requestFramePermissions": []
+}
