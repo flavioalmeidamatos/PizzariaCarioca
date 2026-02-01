@@ -36,10 +36,9 @@ const App: React.FC = () => {
     if (progress === 100) {
       // Small delay after 100% before showing login/dashboard
       const timeout = setTimeout(async () => {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          setCurrentView('dashboard');
-        }
+        // Force sign out to ensure we land on login screen every time
+        await supabase.auth.signOut();
+        setCurrentView('login');
         setLoading(false);
       }, 500);
       return () => clearTimeout(timeout);

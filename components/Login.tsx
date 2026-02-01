@@ -215,7 +215,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         </div>
 
         {/* Form Section */}
-        <form onSubmit={handleSubmit} className="space-y-5 w-full">
+        <form onSubmit={handleSubmit} className="space-y-5 w-full" autoComplete="off">
 
           {/* Anti-Autofill Hack */}
           <input type="text" className="hidden" aria-hidden="true" tabIndex={-1} title="Honeypot" readOnly />
@@ -327,7 +327,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               <input
                 type="email"
                 name="user_email"
-                autoComplete="email"
+                autoComplete="off"
                 className={`block w-full pl-12 pr-4 py-3.5 bg-surface/50 border ${emailError ? 'border-red-500' : 'border-slate-700'} rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-white placeholder:text-slate-600`}
                 placeholder="Seu E-mail"
                 aria-label="E-mail"
@@ -349,7 +349,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="user_password_new"
-                  autoComplete="new-password"
+                  autoComplete="off"
                   className="block w-full pl-12 pr-12 py-3.5 bg-surface/50 border border-slate-700 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-white placeholder:text-slate-600"
                   placeholder="Senha"
                   aria-label="Definir Senha"
@@ -362,7 +362,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="user_password"
-                  autoComplete="current-password"
+                  autoComplete="off"
                   className="block w-full pl-12 pr-12 py-3.5 bg-surface/50 border border-slate-700 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-white placeholder:text-slate-600"
                   placeholder="Senha"
                   aria-label="Senha"
