@@ -850,6 +850,48 @@ const GenericTable = ({ headers, data, title }: any) => {
           </table>
         </div>
       </div>
+
+      {totalPages > 1 && (
+        <div className="p-3 border-t border-white/10 bg-slate-900/50 flex items-center justify-end gap-3 shrink-0">
+          <button
+            onClick={prevPage}
+            disabled={currentPage === 1}
+            aria-label="Página anterior"
+            title="Página anterior"
+            className="p-2 rounded-lg hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-transparent text-white transition-colors"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <div className="flex gap-1">
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              let pageNum = i + 1;
+              if (totalPages > 5 && currentPage > 3) {
+                pageNum = currentPage - 2 + i;
+                if (pageNum > totalPages) pageNum = totalPages - (4 - i);
+              }
+
+              return (
+                <button
+                  key={i}
+                  onClick={() => setCurrentPage(pageNum)}
+                  className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${currentPage === pageNum ? 'bg-primary text-white shadow-lg' : 'text-slate-400 hover:bg-white/5'}`}
+                >
+                  {pageNum}
+                </button>
+              )
+            })}
+          </div>
+          <button
+            onClick={nextPage}
+            disabled={currentPage === totalPages}
+            aria-label="Próxima página"
+            title="Próxima página"
+            className="p-2 rounded-lg hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-transparent text-white transition-colors"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      )}
     </div>
   );
 };
