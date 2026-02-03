@@ -57,6 +57,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [isDeletingConfirmation, setIsDeletingConfirmation] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [categorySearch, setCategorySearch] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -69,6 +70,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   // Logic inside Dashboard...
   React.useEffect(() => {
     fetchProducts();
+    checkAdmin();
     // Clear form when switching screens
     if (activeView !== 'produtos') {
       setIsAddingNew(false);
@@ -80,6 +82,20 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       setIsEditing(false);
     }
   }, [activeView]);
+
+  const checkAdmin = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user?.email) {
+      const { data } = await supabase
+        .from('administradores')
+        .select('id')
+        .eq('email', user.email)
+        .maybeSingle(); // Use maybeSingle to avoid 406 error if not found
+
+      if (data) setIsAdmin(true);
+      else setIsAdmin(false);
+    }
+  };
 
   const fetchProducts = async () => {
     const { data, error } = await supabase
@@ -252,6 +268,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       isAddingNew={isAddingNew}
       isSearching={!!productActionType}
       isDeletingConfirmation={isDeletingConfirmation}
+      isAdmin={isAdmin}
     >
       {/* Alert outside the grid to keep grid structure stable and prevent focus loss */}
       {products.length === 0 && !isAddingNew && !isEditing && (
@@ -696,14 +713,14 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 };
 
 // Reusable Action Footer Component based on Image 2 - MOVED OUTSIDE FOR STABILITY
-const ActionFooter = ({ onExit, onInclude, onSave, onAlter, onDelete, isTableEmpty, isEditing, isAddingNew, isSearching, isDeletingConfirmation }: any) => (
+const ActionFooter = ({ onExit, onInclude, onSave, onAlter, onDelete, isTableEmpty, isEditing, isAddingNew, isSearching, isDeletingConfirmation, isAdmin = false }: any) => (
   <div className="p-3 border-t border-white/10 bg-slate-900/50 backdrop-blur-md shrink-0 grid grid-cols-2 md:flex md:justify-end gap-2">
     <button
       id="btn-incluir"
       onClick={onInclude}
-      disabled={isDeletingConfirmation || isEditing}
-      title={isDeletingConfirmation ? "Botão desabilitado durante exclusão" : (isEditing ? "Conclua a edição atual antes de incluir novo" : "Limpar todos os campos e preparar para um novo cadastro")}
-      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-green-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] active:scale-95 shadow-lg group ${(isDeletingConfirmation || isEditing) ? 'opacity-50 cursor-not-allowed' : ''}`}
+      disabled={!isAdmin || isDeletingConfirmation || isEditing}
+      title={!isAdmin ? "Acesso restrito a administradores" : (isDeletingConfirmation ? "Botão desabilitado durante exclusão" : (isEditing ? "Conclua a edição atual antes de incluir novo" : "Limpar todos os campos e preparar para um novo cadastro"))}
+      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-green-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] active:scale-95 shadow-lg group ${(!isAdmin || isDeletingConfirmation || isEditing) ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <Plus size={18} className="text-white group-hover:rotate-90 transition-transform" />
       <span className="font-bold text-xs uppercase tracking-wider">INCLUIR</span>
@@ -720,18 +737,18 @@ const ActionFooter = ({ onExit, onInclude, onSave, onAlter, onDelete, isTableEmp
     </button>
     <button
       onClick={onAlter}
-      disabled={isTableEmpty || isDeletingConfirmation || isAddingNew}
-      title={isDeletingConfirmation ? "Botão desabilitado durante exclusão" : (isAddingNew ? "Conclua a inclusão atual antes de alterar" : "Habilitar edição para o registro selecionado")}
-      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-amber-600 to-yellow-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] active:scale-95 shadow-lg group ${(isTableEmpty || isDeletingConfirmation || isAddingNew) ? 'opacity-50 cursor-not-allowed' : ''}`}
+      disabled={!isAdmin || isTableEmpty || isDeletingConfirmation || isAddingNew || isEditing}
+      title={!isAdmin ? "Acesso restrito a administradores" : (isDeletingConfirmation ? "Botão desabilitado durante exclusão" : (isAddingNew || isEditing ? "Conclua a operação atual antes de alterar" : "Habilitar edição para o registro selecionado"))}
+      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-amber-600 to-yellow-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] active:scale-95 shadow-lg group ${(!isAdmin || isTableEmpty || isDeletingConfirmation || isAddingNew || isEditing) ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <Edit size={18} className="text-white group-hover:-rotate-12 transition-transform" />
       <span className="font-bold text-xs uppercase tracking-wider">ALTERAR</span>
     </button>
     <button
       onClick={onDelete}
-      disabled={isTableEmpty || isDeletingConfirmation || isAddingNew || isEditing}
-      title={isDeletingConfirmation ? "Botão desabilitado durante exclusão" : (isAddingNew || isEditing ? "Conclua a ação atual antes de excluir" : "Excluir permanentemente o registro selecionado")}
-      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-red-700 to-rose-600 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] active:scale-95 shadow-lg group ${(isTableEmpty || isDeletingConfirmation || isAddingNew || isEditing) ? 'opacity-50 cursor-not-allowed' : ''}`}
+      disabled={!isAdmin || isTableEmpty || isDeletingConfirmation || isAddingNew || isEditing}
+      title={!isAdmin ? "Acesso restrito a administradores" : (isDeletingConfirmation ? "Botão desabilitado durante exclusão" : (isAddingNew || isEditing ? "Conclua a ação atual antes de excluir" : "Excluir permanentemente o registro selecionado"))}
+      className={`flex items-center justify-center gap-2 bg-gradient-to-r from-red-700 to-rose-600 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] active:scale-95 shadow-lg group ${(!isAdmin || isTableEmpty || isDeletingConfirmation || isAddingNew || isEditing) ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <Trash2 size={18} className="text-white group-hover:scale-110 transition-transform" />
       <span className="font-bold text-xs uppercase tracking-wider">EXCLUIR</span>
