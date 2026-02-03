@@ -643,12 +643,12 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               <div className="grid grid-cols-12 gap-y-1 gap-x-2 items-center">
                 {/* Headers */}
                 <div className="col-span-1"></div>
-                <div className="col-span-2"><span className={labelClass}>Peso/Un(g)</span></div>
+                <div className="col-span-2"><span className={labelClass}>Peso/Unidade (gr)</span></div>
                 <div className="col-span-2"><span className={labelClass}>Unidades</span></div>
-                <div className="col-span-1"><span className={labelClass}>% Hist</span></div>
+                <div className="col-span-1"><span className={labelClass}>% Histórico</span></div>
                 <div className="col-span-2"><span className={labelClass}>Peso Kg</span></div>
-                <div className="col-span-2"><span className={labelClass}>Qtd. Molho</span></div>
-                <div className="col-span-2"><span className={labelClass}>Qtd. Queijo</span></div>
+                <div className="col-span-2"><span className={labelClass}>Qtd. Usada (Molho)</span></div>
+                <div className="col-span-2"><span className={labelClass}>Qtd. Usada (Muçarela)</span></div>
 
                 {/* Row: MÉDIO */}
                 <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
@@ -680,11 +680,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 {/* Row: SUBTOTAL */}
                 <div className="col-span-1 mt-1"><span className="text-[9px] text-primary uppercase font-bold self-center text-left pl-1">Subtotal</span></div>
                 <div className="col-span-2 mt-1 bg-slate-800/50 rounded-lg h-6"></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Unidades Histórico" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
-                <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Porcentagem Histórico" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Peso Histórico" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Molho Histórico" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Muçarela Histórico" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Unidades Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Porcentagem Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Peso Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Molho Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Muçarela Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
               </div>
             </div>
 
@@ -696,10 +696,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                   <h3 className={sectionTitleClass}>Estoque Atual</h3>
                   <div className="grid grid-cols-5 gap-1 items-center">
                     <div className="col-span-1"></div>
-                    <div className="col-span-1"><span className={labelClass}>Unds</span></div>
+                    <div className="col-span-1"><span className={labelClass}>Unidades</span></div>
                     <div className="col-span-1"><span className={labelClass}>Kg</span></div>
                     <div className="col-span-1"><span className={labelClass}>Molho</span></div>
-                    <div className="col-span-1"><span className={labelClass}>Queijo</span></div>
+                    <div className="col-span-1"><span className={labelClass}>Muçarela</span></div>
 
                     <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
                     <div className="col-span-1"><input disabled aria-label="Estoque Unds Médio" className={inputClass} /></div>
@@ -726,9 +726,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                   <h3 className={sectionTitleClass}>Necessidade Produção</h3>
                   <div className="grid grid-cols-4 gap-1 items-center">
                     <div className="col-span-1"></div>
-                    <div className="col-span-1"><span className={labelClass}>Massa (Kg)</span></div>
+                    <div className="col-span-1"><span className={labelClass}>Bolinhas (Kg)</span></div>
                     <div className="col-span-1"><span className={labelClass}>Molho</span></div>
-                    <div className="col-span-1"><span className={labelClass}>Queijo</span></div>
+                    <div className="col-span-1"><span className={labelClass}>Muçarela</span></div>
 
                     <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
                     <div className="col-span-1"><input disabled aria-label="Necessidade Massa Médio" className={inputClass} /></div>
@@ -746,9 +746,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                     <div className="col-span-1"><input disabled aria-label="Necessidade Queijo Família" className={inputClass} /></div>
 
                     <div className="col-span-1 mt-1"><span className="text-[9px] text-primary uppercase font-bold self-center text-left pl-1">Subtotal</span></div>
-                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Massa" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
-                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Molho" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
-                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Queijo" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Massa" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Molho" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Queijo" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
                   </div>
                 </div>
               </div>
