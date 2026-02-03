@@ -39,19 +39,13 @@ const PresetButton = ({ value, children, ...props }: HTMLAttributes<HTMLButtonEl
     };
 
     return (
-        <Button
+        <button
             {...props}
-            // It's important to give `null` explicitly to the `slot` prop
-            // otherwise the button will throw an error due to not using one of
-            // the required slots inside the Calendar component.
-            // Passing `null` will tell the button to not use a slot context.
-            slot={null}
-            size="md"
-            color="secondary"
             onClick={handleClick}
+            className="flex items-center justify-center bg-slate-700/50 hover:bg-slate-600/50 text-white px-4 py-2 rounded-lg transition-all hover:scale-105 font-medium text-sm border border-white/10"
         >
             {children}
-        </Button>
+        </button>
     );
 };
 
@@ -69,9 +63,21 @@ export const Calendar = ({ highlightedDates, className, ...props }: CalendarProp
         <ContextWrapper>
             <AriaCalendar {...props} className={(state) => cx("flex flex-col gap-3", typeof className === "function" ? className(state) : className)}>
                 <header className="flex items-center justify-between">
-                    <Button slot="previous" iconLeading={ChevronLeft} size="sm" color="tertiary" className="size-8" />
-                    <AriaHeading className="text-sm font-semibold text-fg-secondary" />
-                    <Button slot="next" iconLeading={ChevronRight} size="sm" color="tertiary" className="size-8" />
+                    <button
+                        slot="previous"
+                        aria-label="Previous month"
+                        className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all hover:scale-110 border border-white/10"
+                    >
+                        <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <AriaHeading className="text-sm font-semibold text-white" />
+                    <button
+                        slot="next"
+                        aria-label="Next month"
+                        className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all hover:scale-110 border border-white/10"
+                    >
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
                 </header>
 
                 <div className="flex gap-3">
@@ -83,7 +89,7 @@ export const Calendar = ({ highlightedDates, className, ...props }: CalendarProp
                     <AriaCalendarGridHeader className="border-b-4 border-transparent">
                         {(day) => (
                             <AriaCalendarHeaderCell className="p-0">
-                                <div className="flex size-10 items-center justify-center text-sm font-medium text-secondary">{day.slice(0, 2)}</div>
+                                <div className="flex size-10 items-center justify-center text-sm font-medium text-slate-400">{day.slice(0, 2)}</div>
                             </AriaCalendarHeaderCell>
                         )}
                     </AriaCalendarGridHeader>
