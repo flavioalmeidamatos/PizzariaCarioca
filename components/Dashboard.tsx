@@ -601,28 +601,193 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     </ScreenWrapper>
   );
 
-  const renderProduction = () => (
-    <ScreenWrapper
-      title="Painel de Produção"
-      subtitle="Controle de pedidos e estágio de preparo"
-      icon={Calculator}
-      onExit={() => setActiveView('dashboard')}
-      isTableEmpty={false}
-      isEditing={false}
-    >
-      <div className="grid grid-cols-12 gap-2 md:gap-3 mb-4">
-        <div className="col-span-6 md:col-span-3"><label htmlFor="prod-id" className="text-[10px] text-slate-400 mb-1 block uppercase">ID Pedido</label><input id="prod-id" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
-        <div className="col-span-6 md:col-span-9"><label htmlFor="prod-item" className="text-[10px] text-slate-400 mb-1 block uppercase">Item em Produção</label><input id="prod-item" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
-        <div className="col-span-6"><label htmlFor="prod-base" className="text-[10px] text-slate-400 mb-1 block uppercase">Massa / Base</label><input id="prod-base" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
-        <div className="col-span-6"><label htmlFor="prod-staff" className="text-[10px] text-slate-400 mb-1 block uppercase">Responsável Preparo</label><input id="prod-staff" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
-      </div>
-      <GenericTable
-        headers={["Hora", "Pedido", "Produtos", "Mesa/Ret", "Estágio"]}
-        data={Array.from({ length: 10 }, (_, i) => ({ h: '19:42', id: `#ORD-${i + 200}`, p: '2x Pizza Grande', m: 'Mesa 04', st: 'EM PREPARO' }))}
-        title="Monitor de Produção"
-      />
-    </ScreenWrapper>
-  );
+  const renderProduction = () => {
+    const inputClass = "w-full bg-surface/50 border border-slate-700 rounded-lg px-3 py-1.5 text-right text-xs text-slate-300 disabled:opacity-60 disabled:cursor-not-allowed outline-none font-medium";
+    const labelClass = "text-[10px] text-slate-400 uppercase font-bold text-center mb-1 block tracking-wider";
+    const rowLabelClass = "text-[10px] text-slate-400 uppercase font-bold self-center text-left pl-2";
+    const sectionTitleClass = "text-xs font-bold text-primary uppercase tracking-widest text-center mb-4 bg-slate-800/50 py-1 rounded-lg border border-white/5";
+
+    return (
+      <ScreenWrapper
+        title="Mapa de Produção"
+        subtitle="Cálculo de insumos e controle de massas"
+        icon={Calculator}
+        onExit={() => setActiveView('dashboard')}
+        isTableEmpty={false}
+        isEditing={false}
+      >
+        <div className="space-y-6">
+          {/* Date Picker Row */}
+          <div className="flex items-center gap-3 bg-slate-800/30 p-3 rounded-xl border border-white/5 w-fit">
+            <span className="text-[10px] uppercase font-bold text-slate-400">Data do Mapa:</span>
+            <div className="relative">
+              <Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-primary" />
+              <input
+                type="date"
+                disabled
+                className="bg-slate-900 border border-slate-700 rounded-lg py-1.5 pl-9 pr-3 text-xs text-white disabled:opacity-80 outline-none focus:border-primary transition-colors"
+                value="2024-02-03"
+              />
+            </div>
+          </div>
+
+          {/* Section 1: HISTÓRICO */}
+          <div className="p-4 rounded-2xl bg-surface/30 border border-white/5">
+            <h3 className={sectionTitleClass}>Histórico</h3>
+            <div className="grid grid-cols-12 gap-y-2 gap-x-3 items-center">
+              {/* Headers */}
+              <div className="col-span-1"></div>
+              <div className="col-span-2"><span className={labelClass}>Peso/Unidade (g)</span></div>
+              <div className="col-span-2"><span className={labelClass}>Unidades</span></div>
+              <div className="col-span-1"><span className={labelClass}>% Hist</span></div>
+              <div className="col-span-2"><span className={labelClass}>Peso Kg</span></div>
+              <div className="col-span-2"><span className={labelClass}>Qtd. Molho</span></div>
+              <div className="col-span-2"><span className={labelClass}>Qtd. Muçarela</span></div>
+
+              {/* Row: MÉDIO */}
+              <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
+              <div className="col-span-2"><input disabled value="0,350" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled className={inputClass} /></div>
+              <div className="col-span-1"><input disabled className={inputClass} /></div>
+              <div className="col-span-2"><input disabled className={inputClass} /></div>
+              <div className="col-span-2"><input disabled value="0,040" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled value="0,180" className={inputClass} /></div>
+
+              {/* Row: GRANDE */}
+              <div className="col-span-1"><span className={rowLabelClass}>Grande</span></div>
+              <div className="col-span-2"><input disabled value="0,400" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled className={inputClass} /></div>
+              <div className="col-span-1"><input disabled className={inputClass} /></div>
+              <div className="col-span-2"><input disabled className={inputClass} /></div>
+              <div className="col-span-2"><input disabled value="0,080" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled value="0,250" className={inputClass} /></div>
+
+              {/* Row: FAMÍLIA */}
+              <div className="col-span-1"><span className={rowLabelClass}>Família</span></div>
+              <div className="col-span-2"><input disabled value="0,450" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled className={inputClass} /></div>
+              <div className="col-span-1"><input disabled className={inputClass} /></div>
+              <div className="col-span-2"><input disabled className={inputClass} /></div>
+              <div className="col-span-2"><input disabled value="0,100" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled value="0,300" className={inputClass} /></div>
+
+              {/* Row: SUBTOTAL */}
+              <div className="col-span-1 mt-2"><span className="text-[10px] text-primary uppercase font-bold self-center text-left pl-2">Subtotal</span></div>
+              <div className="col-span-2 mt-2 bg-slate-800/50 rounded-lg h-8"></div>
+              <div className="col-span-2 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+              <div className="col-span-1 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+              <div className="col-span-2 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+              <div className="col-span-2 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+              <div className="col-span-2 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Left Column: ESTOQUE + NECESSIDADE */}
+            <div className="space-y-6">
+              {/* ESTOQUE ATUAL */}
+              <div className="p-4 rounded-2xl bg-surface/30 border border-white/5">
+                <h3 className={sectionTitleClass}>Estoque Atual</h3>
+                <div className="grid grid-cols-5 gap-2 items-center">
+                  <div className="col-span-1"></div>
+                  <div className="col-span-1"><span className={labelClass}>Unds</span></div>
+                  <div className="col-span-1"><span className={labelClass}>Kg</span></div>
+                  <div className="col-span-1"><span className={labelClass}>Molho</span></div>
+                  <div className="col-span-1"><span className={labelClass}>Queijo</span></div>
+
+                  <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+
+                  <div className="col-span-1"><span className={rowLabelClass}>Grande</span></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+
+                  <div className="col-span-1"><span className={rowLabelClass}>Família</span></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                </div>
+              </div>
+
+              {/* NECESSIDADE PRODUÇÃO */}
+              <div className="p-4 rounded-2xl bg-surface/30 border border-white/5">
+                <h3 className={sectionTitleClass}>Necessidade Produção</h3>
+                <div className="grid grid-cols-4 gap-2 items-center">
+                  <div className="col-span-1"></div>
+                  <div className="col-span-1"><span className={labelClass}>Massa (Kg)</span></div>
+                  <div className="col-span-1"><span className={labelClass}>Molho</span></div>
+                  <div className="col-span-1"><span className={labelClass}>Queijo</span></div>
+
+                  <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+
+                  <div className="col-span-1"><span className={rowLabelClass}>Grande</span></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+
+                  <div className="col-span-1"><span className={rowLabelClass}>Família</span></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+
+                  <div className="col-span-1 mt-2"><span className="text-[10px] text-primary uppercase font-bold self-center text-left pl-2">Subtotal</span></div>
+                  <div className="col-span-1 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+                  <div className="col-span-1 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+                  <div className="col-span-1 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: AJUSTE */}
+            <div className="h-full">
+              <div className="p-4 rounded-2xl bg-surface/30 border border-white/5 h-full flex flex-col">
+                <h3 className={sectionTitleClass}>Ajuste Produção</h3>
+
+                <div className="mb-6">
+                  <label className={labelClass + " text-left pl-1"}>Motivo da Produção:</label>
+                  <textarea
+                    disabled
+                    className="w-full bg-surface/50 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white disabled:opacity-60 outline-none focus:border-primary resize-none h-24"
+                    placeholder="Descreva o motivo..."
+                  ></textarea>
+                </div>
+
+                <div className="space-y-4">
+                  <span className={labelClass + " text-left pl-1"}>% de Ajuste:</span>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <span className={labelClass}>Médio</span>
+                      <input disabled className={inputClass} />
+                    </div>
+                    <div>
+                      <span className={labelClass}>Grande</span>
+                      <input disabled className={inputClass} />
+                    </div>
+                    <div>
+                      <span className={labelClass}>Família</span>
+                      <input disabled className={inputClass} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Visual filler to balance height if needed */}
+                <div className="flex-1 min-h-[50px]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ScreenWrapper>
+    );
+  };
 
   const renderContent = () => {
     switch (activeView) {
