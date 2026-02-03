@@ -3,8 +3,7 @@ import { useControlledState } from "@react-stately/utils";
 import { Calendar as CalendarIcon } from "@untitledui/icons";
 import { useDateFormatter } from "react-aria";
 import type { DatePickerProps as AriaDatePickerProps, DateValue } from "react-aria-components";
-import { DatePicker as AriaDatePicker, Dialog as AriaDialog, Group as AriaGroup, Popover as AriaPopover } from "react-aria-components";
-import { Button } from "@/components/base/buttons/button";
+import { DatePicker as AriaDatePicker, Dialog as AriaDialog, Group as AriaGroup, Popover as AriaPopover, Button as AriaButton } from "react-aria-components";
 import { cx } from "@/utils/cx";
 import { Calendar } from "./calendar";
 
@@ -30,12 +29,12 @@ export const DatePicker = ({ value: valueProp, defaultValue, onChange, onApply, 
     return (
         <AriaDatePicker shouldCloseOnSelect={false} {...props} value={value} onChange={setValue}>
             <AriaGroup>
-                <button
-                    className="flex items-center gap-2 bg-slate-800/50 border-2 border-white/30 rounded-lg px-3 py-1.5 text-[10px] text-white hover:bg-slate-700/50 hover:border-primary/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed outline-none focus:border-primary shadow-lg"
+                <AriaButton
+                    className="flex items-center gap-2 bg-slate-800/50 border-2 border-white/30 rounded-lg px-3 py-1.5 text-[10px] text-white hover:bg-slate-700/50 hover:border-primary/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed outline-none focus:border-primary shadow-lg cursor-pointer"
                 >
                     <CalendarIcon className="w-3 h-3 text-primary" />
                     <span className="font-medium">{formattedDate}</span>
-                </button>
+                </AriaButton>
             </AriaGroup>
             <AriaPopover
                 offset={8}
