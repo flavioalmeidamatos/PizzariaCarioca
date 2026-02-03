@@ -29,6 +29,9 @@ import {
   FileText,
   Eye
 } from 'lucide-react';
+import { getLocalTimeZone, today } from "@internationalized/date";
+import type { DateValue } from "react-aria-components";
+import { DatePicker } from "./application/date-picker/date-picker";
 import { LOGO_URL } from '../types';
 import { supabase } from '../lib/supabase';
 
@@ -62,6 +65,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [categorySearch, setCategorySearch] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [isProductionEditing, setIsProductionEditing] = useState(false);
+  const [productionDate, setProductionDate] = useState<DateValue | null>(today(getLocalTimeZone()));
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -624,28 +628,14 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         <div className="flex-1 overflow-y-auto p-3 md:p-4 custom-scrollbar">
           <div className="space-y-3">
             {/* Date Picker Row */}
-            <div className="flex items-center gap-2 bg-slate-800/30 p-2 rounded-xl border-2 border-white/30 w-fit">
+            <div className="flex items-center gap-2 w-fit">
               <span className="text-[9px] uppercase font-bold text-slate-400" id="label-data-mapa">Data do Mapa:</span>
-              <div className="relative">
-                <Calendar
-                  size={12}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 text-primary cursor-pointer hover:text-primary/80 transition-colors z-10"
-                  onClick={() => {
-                    const dateInput = document.getElementById('production-date-input') as HTMLInputElement;
-                    if (dateInput && !dateInput.disabled) {
-                      dateInput.showPicker?.();
-                    }
-                  }}
-                />
-                <input
-                  id="production-date-input"
-                  type="date"
-                  disabled={!isProductionEditing}
-                  aria-labelledby="label-data-mapa"
-                  className="bg-slate-900 border-2 border-white/30 rounded-lg py-1 pl-7 pr-2 text-[10px] text-white disabled:opacity-80 outline-none focus:border-primary transition-colors h-6"
-                  value="2024-02-03"
-                />
-              </div>
+              <DatePicker
+                aria-label="Data do Mapa"
+                value={productionDate}
+                onChange={setProductionDate}
+                isDisabled={!isProductionEditing}
+              />
             </div>
 
             {/* Section 1: HISTÓRICO */}
