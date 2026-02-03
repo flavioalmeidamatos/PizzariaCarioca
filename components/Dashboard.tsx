@@ -850,7 +850,6 @@ const GenericTable = ({ headers, data, title }: any) => {
           </table>
         </div>
       </div>
-
     </div>
   );
 };
