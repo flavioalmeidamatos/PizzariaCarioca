@@ -13,8 +13,8 @@ import {
     CalendarStateContext as AriaCalendarStateContext,
     Heading as AriaHeading,
     useSlottedContext,
+    Button as AriaButton,
 } from "react-aria-components";
-import { Button } from "@/components/base/buttons/button";
 import { cx } from "@/utils/cx";
 import { CalendarCell } from "./cell";
 import { DateInput } from "./date-input";
@@ -63,21 +63,19 @@ export const Calendar = ({ highlightedDates, className, ...props }: CalendarProp
         <ContextWrapper>
             <AriaCalendar {...props} className={(state) => cx("flex flex-col gap-3", typeof className === "function" ? className(state) : className)}>
                 <header className="flex items-center justify-between">
-                    <button
+                    <AriaButton
                         slot="previous"
-                        aria-label="Previous month"
-                        className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all hover:scale-110 border border-white/10"
+                        className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all hover:scale-110 border border-white/10 outline-none focus:ring-2 focus:ring-primary cursor-pointer"
                     >
                         <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    <AriaHeading className="text-sm font-semibold text-white" />
-                    <button
+                    </AriaButton>
+                    <AriaHeading className="text-sm font-semibold text-white capitalize" />
+                    <AriaButton
                         slot="next"
-                        aria-label="Next month"
-                        className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all hover:scale-110 border border-white/10"
+                        className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all hover:scale-110 border border-white/10 outline-none focus:ring-2 focus:ring-primary cursor-pointer"
                     >
                         <ChevronRight className="w-4 h-4" />
-                    </button>
+                    </AriaButton>
                 </header>
 
                 <div className="flex gap-3">
