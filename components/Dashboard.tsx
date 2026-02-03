@@ -627,8 +627,18 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             <div className="flex items-center gap-2 bg-slate-800/30 p-2 rounded-xl border-2 border-white/30 w-fit">
               <span className="text-[9px] uppercase font-bold text-slate-400" id="label-data-mapa">Data do Mapa:</span>
               <div className="relative">
-                <Calendar size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-primary" />
+                <Calendar
+                  size={12}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 text-primary cursor-pointer hover:text-primary/80 transition-colors z-10"
+                  onClick={() => {
+                    const dateInput = document.getElementById('production-date-input') as HTMLInputElement;
+                    if (dateInput && !dateInput.disabled) {
+                      dateInput.showPicker?.();
+                    }
+                  }}
+                />
                 <input
+                  id="production-date-input"
                   type="date"
                   disabled={!isProductionEditing}
                   aria-labelledby="label-data-mapa"
