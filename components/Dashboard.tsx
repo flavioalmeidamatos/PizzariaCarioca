@@ -24,6 +24,7 @@ import {
   Calendar,
   DollarSign,
   ChevronRight,
+  ChevronLeft,
   ChevronsUpDown
 } from 'lucide-react';
 import { LOGO_URL } from '../types';
@@ -331,7 +332,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 setShowCategoryModal(true);
               }}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
+                if (e.key === 'Enter' || e.key === 'Tab') {
+                  if (e.key === 'Enter') e.preventDefault();
                   setShowCategoryModal(false);
                   document.getElementById('nome-prod')?.focus();
                 }
@@ -437,18 +439,18 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         </div>
       </div>
       {
-        renderGenericTable(
-          ["ID", "Cód. Barras", "Produto", "Categoria", "Preço", "Status"],
-          products.map(p => ({
+        <GenericTable
+          headers={["ID", "Cód. Barras", "Produto", "Categoria", "Preço", "Status"]}
+          data={products.map(p => ({
             id: p.id_consumer || '---',
             barcode: p.codigo_barras || '---',
             prod: p.nome_produto,
             cat: p.categoria || 'Geral',
             price: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(p.preco || 0),
             status: p.status
-          })),
-          "Consulta Produtos"
-        )
+          }))}
+          title="Consulta Produtos"
+        />
       }
 
       {/* Search Modal */}
@@ -522,11 +524,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         <div className="col-span-6 md:col-span-4"><label htmlFor="client-tel" className="text-[10px] text-slate-400 mb-1 block uppercase">Telefone/WhatsApp</label><input id="client-tel" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
         <div className="col-span-6 md:col-span-8"><label htmlFor="client-addr" className="text-[10px] text-slate-400 mb-1 block uppercase">Endereço de Entrega</label><input id="client-addr" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
       </div>
-      {renderGenericTable(
-        ["ID", "Cliente", "Contato", "Localização", "Status"],
-        Array.from({ length: 10 }, (_, i) => ({ id: (i + 1).toString().padStart(4, '0'), name: `Cliente ${i + 1}`, tel: '(21) 99999-9999', loc: 'Copacabana, RJ', status: 'ATIVO' })),
-        "Consulta Clientes"
-      )}
+      <GenericTable
+        headers={["ID", "Cliente", "Contato", "Localização", "Status"]}
+        data={Array.from({ length: 10 }, (_, i) => ({ id: (i + 1).toString().padStart(4, '0'), name: `Cliente ${i + 1}`, tel: '(21) 99999-9999', loc: 'Copacabana, RJ', status: 'ATIVO' }))}
+        title="Consulta Clientes"
+      />
     </ScreenWrapper>
   );
 
@@ -545,11 +547,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         <div className="col-span-6"><label htmlFor="sup-cat" className="text-[10px] text-slate-400 mb-1 block uppercase">Categoria Insumo</label><input id="sup-cat" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
         <div className="col-span-6"><label htmlFor="sup-seller" className="text-[10px] text-slate-400 mb-1 block uppercase">Vendedor Responsável</label><input id="sup-seller" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
       </div>
-      {renderGenericTable(
-        ["ID", "Fornecedor", "Segmento", "Contato", "Status"],
-        Array.from({ length: 10 }, (_, i) => ({ id: (i + 1).toString().padStart(4, '0'), name: `Fornecedor ${i + 1}`, seg: 'Bebidas', contact: 'contato@forn.com', status: 'ATIVO' })),
-        "Consulta Fornecedores"
-      )}
+      <GenericTable
+        headers={["ID", "Fornecedor", "Segmento", "Contato", "Status"]}
+        data={Array.from({ length: 10 }, (_, i) => ({ id: (i + 1).toString().padStart(4, '0'), name: `Fornecedor ${i + 1}`, seg: 'Bebidas', contact: 'contato@forn.com', status: 'ATIVO' }))}
+        title="Consulta Fornecedores"
+      />
     </ScreenWrapper>
   );
 
@@ -567,11 +569,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         <div className="col-span-6 md:col-span-3"><label htmlFor="stock-qty" className="text-[10px] text-slate-400 mb-1 block uppercase">Qtd. Atual</label><input id="stock-qty" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
         <div className="col-span-6 md:col-span-3"><label htmlFor="stock-min" className="text-[10px] text-slate-400 mb-1 block uppercase">Estoque Mínimo</label><input id="stock-min" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
       </div>
-      {renderGenericTable(
-        ["SKU", "Descrição", "Und", "Atual", "Mínimo"],
-        Array.from({ length: 10 }, (_, i) => ({ sku: `SKU-${i + 100}`, desc: `Item Insumo ${i + 1}`, und: 'KG', qta: '15.5', min: '5.0' })),
-        "Painel de Inventário"
-      )}
+      <GenericTable
+        headers={["SKU", "Descrição", "Und", "Atual", "Mínimo"]}
+        data={Array.from({ length: 10 }, (_, i) => ({ sku: `SKU-${i + 100}`, desc: `Item Insumo ${i + 1}`, und: 'KG', qta: '15.5', min: '5.0' }))}
+        title="Painel de Inventário"
+      />
     </ScreenWrapper>
   );
 
@@ -591,11 +593,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         <div className="col-span-6 md:col-span-4"><label htmlFor="acc-due" className="text-[10px] text-slate-400 mb-1 block uppercase">Vencimento</label><div className="relative"><Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" /><input id="acc-due" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] pl-8 px-3 text-sm" /></div></div>
         <div className="col-span-12 md:col-span-4"><label htmlFor="acc-pay" className="text-[10px] text-slate-400 mb-1 block uppercase">Forma Pgto</label><input id="acc-pay" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
       </div>
-      {renderGenericTable(
-        ["Doc", "Credor", "Vencimento", "Valor", "Status"],
-        Array.from({ length: 10 }, (_, i) => ({ doc: `NF-${i + 500}`, cred: `Fornecedor Exemplo ${i + 1}`, venc: '25/08/2024', val: 'R$ 1.250,00', status: 'PENDENTE' })),
-        "Consulta Lançamentos"
-      )}
+      <GenericTable
+        headers={["Doc", "Credor", "Vencimento", "Valor", "Status"]}
+        data={Array.from({ length: 10 }, (_, i) => ({ doc: `NF-${i + 500}`, cred: `Fornecedor Exemplo ${i + 1}`, venc: '25/08/2024', val: 'R$ 1.250,00', status: 'PENDENTE' }))}
+        title="Consulta Lançamentos"
+      />
     </ScreenWrapper>
   );
 
@@ -614,11 +616,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         <div className="col-span-6"><label htmlFor="prod-base" className="text-[10px] text-slate-400 mb-1 block uppercase">Massa / Base</label><input id="prod-base" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
         <div className="col-span-6"><label htmlFor="prod-staff" className="text-[10px] text-slate-400 mb-1 block uppercase">Responsável Preparo</label><input id="prod-staff" className="w-full bg-surface/50 border border-slate-700 rounded-lg h-[36px] px-3 text-sm" /></div>
       </div>
-      {renderGenericTable(
-        ["Hora", "Pedido", "Produtos", "Mesa/Ret", "Estágio"],
-        Array.from({ length: 10 }, (_, i) => ({ h: '19:42', id: `#ORD-${i + 200}`, p: '2x Pizza Grande', m: 'Mesa 04', st: 'EM PREPARO' })),
-        "Monitor de Produção"
-      )}
+      <GenericTable
+        headers={["Hora", "Pedido", "Produtos", "Mesa/Ret", "Estágio"]}
+        data={Array.from({ length: 10 }, (_, i) => ({ h: '19:42', id: `#ORD-${i + 200}`, p: '2x Pizza Grande', m: 'Mesa 04', st: 'EM PREPARO' }))}
+        title="Monitor de Produção"
+      />
     </ScreenWrapper>
   );
 
@@ -782,58 +784,112 @@ const ScreenWrapper = ({ title, subtitle, icon: Icon, children, ...footerProps }
   </div>
 );
 
-const renderGenericTable = (headers: string[], data: any[], title: string) => (
-  <div className="mt-8 glass-effect rounded-[32px] border border-white/10 overflow-hidden shadow-xl animate-fade-in">
-    <div className="bg-slate-800/50 p-4 border-b border-white/10 flex items-center justify-between">
-      <h3 className="text-white font-bold uppercase tracking-wider text-sm flex items-center gap-2">
-        <Calendar size={16} className="text-primary" /> {title}
-      </h3>
-    </div>
-    <div className="overflow-x-auto custom-scrollbar">
-      <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
-        <table className="w-full text-left border-collapse">
-          <thead className="sticky top-0 z-10">
-            <tr className="bg-slate-900/90 backdrop-blur-md border-b border-white/5">
-              {headers.map((h, i) => (
-                <th key={h} className={`p-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest ${h.toLowerCase().includes('preço') || h.toLowerCase().includes('valor') ? 'text-right' : ''}`}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
-            {data.map((row, idx) => (
-              <tr key={idx} className="hover:bg-white/5 transition-colors group">
-                {Object.entries(row).map(([key, val]: any, vIdx) => {
-                  const isNumeric = typeof val === 'string' && (val.includes('R$') || !isNaN(Number(val.replace(',', '.'))));
-                  const isStatus = key.toLowerCase().includes('status');
+const GenericTable = ({ headers, data, title }: any) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(data.length / itemsPerPage);
 
-                  return (
-                    <td key={vIdx} className={`p-4 text-sm text-slate-300 group-hover:text-white transition-colors ${isNumeric && !val.toString().includes('R$') ? 'text-right font-mono' : 'text-left'}`}>
-                      {isStatus && val === 'ATIVO' ? (
-                        <span className="bg-gradient-to-r from-emerald-500 to-teal-400 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20">
-                          ATIVO
-                        </span>
-                      ) : isStatus && val === 'INATIVO' ? (
-                        <span className="bg-slate-700 text-slate-400 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
-                          INATIVO
-                        </span>
-                      ) : val.toString().includes('R$') ? (
-                        <div className="flex items-center justify-between w-full max-w-[140px] ml-auto font-mono">
-                          <span className="text-slate-500 mr-2">R$</span>
-                          <span className="text-right flex-1">{val.toString().replace('R$', '').trim()}</span>
-                        </div>
-                      ) : (
-                        val
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+  const currentData = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const prevPage = () => setCurrentPage((p) => Math.max(p - 1, 1));
+  const nextPage = () => setCurrentPage((p) => Math.min(p + 1, totalPages));
+
+  return (
+    <div className="mt-8 glass-effect rounded-[32px] border border-white/10 overflow-hidden shadow-xl animate-fade-in flex flex-col h-full max-h-[400px]">
+      <div className="bg-slate-800/50 p-4 border-b border-white/10 flex items-center justify-between shrink-0">
+        <h3 className="text-white font-bold uppercase tracking-wider text-sm flex items-center gap-2">
+          <Calendar size={16} className="text-primary" /> {title}
+        </h3>
+        {totalPages > 1 && (
+          <span className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">
+            Página {currentPage} de {totalPages}
+          </span>
+        )}
       </div>
+      <div className="overflow-x-auto custom-scrollbar flex-1 relative">
+        <div className="overflow-y-auto custom-scrollbar h-full">
+          <table className="w-full text-left border-collapse">
+            <thead className="sticky top-0 z-10">
+              <tr className="bg-slate-900/90 backdrop-blur-md border-b border-white/5">
+                {headers.map((h: string) => (
+                  <th key={h} className={`p-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest ${h.toLowerCase().includes('preço') || h.toLowerCase().includes('valor') ? 'text-right' : ''}`}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {currentData.map((row: any, idx: number) => (
+                <tr key={idx} className="hover:bg-white/5 transition-colors group">
+                  {Object.entries(row).map(([key, val]: any, vIdx) => {
+                    const isNumeric = typeof val === 'string' && (val.includes('R$') || !isNaN(Number(val.replace(',', '.'))));
+                    const isStatus = key.toLowerCase().includes('status');
+
+                    return (
+                      <td key={vIdx} className={`p-4 text-sm text-slate-300 group-hover:text-white transition-colors ${isNumeric && !val.toString().includes('R$') ? 'text-right font-mono' : 'text-left'}`}>
+                        {isStatus && val === 'ATIVO' ? (
+                          <span className="bg-gradient-to-r from-emerald-500 to-teal-400 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20">
+                            ATIVO
+                          </span>
+                        ) : isStatus && val === 'INATIVO' ? (
+                          <span className="bg-slate-700 text-slate-400 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                            INATIVO
+                          </span>
+                        ) : val.toString().includes('R$') ? (
+                          <div className="flex items-center justify-between w-full max-w-[140px] ml-auto font-mono">
+                            <span className="text-slate-500 mr-2">R$</span>
+                            <span className="text-right flex-1">{val.toString().replace('R$', '').trim()}</span>
+                          </div>
+                        ) : (
+                          val
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {totalPages > 1 && (
+        <div className="p-3 border-t border-white/10 bg-slate-900/50 flex items-center justify-end gap-3 shrink-0">
+          <button
+            onClick={prevPage}
+            disabled={currentPage === 1}
+            className="p-2 rounded-lg hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-transparent text-white transition-colors"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <div className="flex gap-1">
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              let pageNum = i + 1;
+              if (totalPages > 5 && currentPage > 3) {
+                pageNum = currentPage - 2 + i;
+                if (pageNum > totalPages) pageNum = totalPages - (4 - i);
+              }
+
+              return (
+                <button
+                  key={i}
+                  onClick={() => setCurrentPage(pageNum)}
+                  className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${currentPage === pageNum ? 'bg-primary text-white shadow-lg' : 'text-slate-400 hover:bg-white/5'}`}
+                >
+                  {pageNum}
+                </button>
+              )
+            })}
+          </div>
+          <button
+            onClick={nextPage}
+            disabled={currentPage === totalPages}
+            className="p-2 rounded-lg hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-transparent text-white transition-colors"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      )}
     </div>
-  </div>
-);
+  );
+};
 
 export default Dashboard;
