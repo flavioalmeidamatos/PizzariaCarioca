@@ -61,6 +61,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [categorySearch, setCategorySearch] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isProductionEditing, setIsProductionEditing] = useState(false);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -604,14 +605,14 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   );
 
   const renderProduction = () => {
-    const inputClass = "w-full bg-surface/50 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-slate-300 disabled:opacity-60 disabled:cursor-not-allowed outline-none font-medium h-6";
+    const inputClass = `w-full bg-surface/50 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-slate-300 ${isProductionEditing ? '' : 'disabled:opacity-60 disabled:cursor-not-allowed'} outline-none font-medium h-6`;
     const labelClass = "text-[9px] text-slate-400 uppercase font-bold text-center mb-0.5 block tracking-wider";
     const rowLabelClass = "text-[9px] text-slate-400 uppercase font-bold self-center text-left pl-1";
     const sectionTitleClass = "text-[10px] font-bold text-primary uppercase tracking-widest text-center mb-2 bg-slate-800/50 py-0.5 rounded-lg border-2 border-white/30";
 
     return (
-      <div className="glass-effect flex flex-col w-full h-full rounded-[1.5rem] md:rounded-[2rem] border border-white/10 shadow-2xl relative z-10 animate-fade-in-up overflow-hidden max-h-[calc(100vh-100px)]">
-        <div className="flex items-center gap-3 md:gap-4 p-3 md:p-4 border-b border-white/10 shrink-0">
+      <div className="glass-effect flex flex-col w-full h-full rounded-[1.5rem] md:rounded-[2rem] border border-white/10 shadow-2xl relative z-10 animate-fade-in-up overflow-hidden" style={{ maxHeight: 'calc(100vh - 40px)' }}>
+        <div className="flex items-center gap-3 md:gap-4 p-2 md:p-3 border-b border-white/10 shrink-0">
           <div className="p-2 bg-primary/20 rounded-xl text-primary border border-primary/20">
             <Calculator size={20} className="md:w-6 md:h-6" />
           </div>
@@ -620,7 +621,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             <p className="text-slate-400 text-[10px] md:text-xs uppercase tracking-widest">Cálculo de insumos e controle de massas</p>
           </div>
         </div>
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-3 md:p-4 custom-scrollbar">
           <div className="space-y-3">
             {/* Date Picker Row */}
             <div className="flex items-center gap-2 bg-slate-800/30 p-2 rounded-xl border-2 border-white/30 w-fit">
@@ -629,7 +630,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 <Calendar size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-primary" />
                 <input
                   type="date"
-                  disabled
+                  disabled={!isProductionEditing}
                   aria-labelledby="label-data-mapa"
                   className="bg-slate-900 border-2 border-white/30 rounded-lg py-1 pl-7 pr-2 text-[10px] text-white disabled:opacity-80 outline-none focus:border-primary transition-colors h-6"
                   value="2024-02-03"
@@ -652,30 +653,30 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
                 {/* Row: MÉDIO */}
                 <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Peso Médio" value="0,350" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Unidades Médio" className={inputClass} /></div>
-                <div className="col-span-1"><input disabled aria-label="Histórico Porcentagem Médio" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Peso Total Médio" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Molho Médio" value="0,040" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Muçarela Médio" value="0,180" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Médio" value="0,350" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Médio" className={inputClass} /></div>
+                <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Histórico Porcentagem Médio" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Total Médio" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Médio" value="0,040" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Médio" value="0,180" className={inputClass} /></div>
 
                 {/* Row: GRANDE */}
                 <div className="col-span-1"><span className={rowLabelClass}>Grande</span></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Peso Grande" value="0,400" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Unidades Grande" className={inputClass} /></div>
-                <div className="col-span-1"><input disabled aria-label="Histórico Porcentagem Grande" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Peso Total Grande" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Molho Grande" value="0,080" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Muçarela Grande" value="0,250" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Grande" value="0,400" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Grande" className={inputClass} /></div>
+                <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Histórico Porcentagem Grande" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Total Grande" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Grande" value="0,080" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Grande" value="0,250" className={inputClass} /></div>
 
                 {/* Row: FAMÍLIA */}
                 <div className="col-span-1"><span className={rowLabelClass}>Família</span></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Peso Família" value="0,450" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Unidades Família" className={inputClass} /></div>
-                <div className="col-span-1"><input disabled aria-label="Histórico Porcentagem Família" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Peso Total Família" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Molho Família" value="0,100" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled aria-label="Histórico Muçarela Família" value="0,300" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Família" value="0,450" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Família" className={inputClass} /></div>
+                <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Histórico Porcentagem Família" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Total Família" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Família" value="0,100" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Família" value="0,300" className={inputClass} /></div>
 
                 {/* Row: SUBTOTAL */}
                 <div className="col-span-1 mt-1"><span className="text-[9px] text-primary uppercase font-bold self-center text-left pl-1">Subtotal</span></div>
@@ -702,22 +703,22 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                     <div className="col-span-1"><span className={labelClass}>Muçarela</span></div>
 
                     <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
-                    <div className="col-span-1"><input disabled aria-label="Estoque Unds Médio" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Estoque Kg Médio" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Estoque Molho Médio" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Estoque Queijo Médio" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Estoque Unds Médio" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Estoque Kg Médio" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Estoque Molho Médio" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Estoque Queijo Médio" className={inputClass} /></div>
 
                     <div className="col-span-1"><span className={rowLabelClass}>Grande</span></div>
-                    <div className="col-span-1"><input disabled aria-label="Estoque Unds Grande" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Estoque Kg Grande" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Estoque Molho Grande" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Estoque Queijo Grande" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Estoque Unds Grande" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Estoque Kg Grande" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Estoque Molho Grande" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Estoque Queijo Grande" className={inputClass} /></div>
 
                     <div className="col-span-1"><span className={rowLabelClass}>Família</span></div>
-                    <div className="col-span-1"><input disabled aria-label="Estoque Unds Família" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Estoque Kg Família" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Estoque Molho Família" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Estoque Queijo Família" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Estoque Unds Família" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Estoque Kg Família" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Estoque Molho Família" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Estoque Queijo Família" className={inputClass} /></div>
                   </div>
                 </div>
 
@@ -731,19 +732,19 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                     <div className="col-span-1"><span className={labelClass}>Muçarela</span></div>
 
                     <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
-                    <div className="col-span-1"><input disabled aria-label="Necessidade Massa Médio" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Necessidade Molho Médio" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Necessidade Queijo Médio" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Massa Médio" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Molho Médio" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Queijo Médio" className={inputClass} /></div>
 
                     <div className="col-span-1"><span className={rowLabelClass}>Grande</span></div>
-                    <div className="col-span-1"><input disabled aria-label="Necessidade Massa Grande" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Necessidade Molho Grande" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Necessidade Queijo Grande" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Massa Grande" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Molho Grande" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Queijo Grande" className={inputClass} /></div>
 
                     <div className="col-span-1"><span className={rowLabelClass}>Família</span></div>
-                    <div className="col-span-1"><input disabled aria-label="Necessidade Massa Família" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Necessidade Molho Família" className={inputClass} /></div>
-                    <div className="col-span-1"><input disabled aria-label="Necessidade Queijo Família" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Massa Família" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Molho Família" className={inputClass} /></div>
+                    <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Queijo Família" className={inputClass} /></div>
 
                     <div className="col-span-1 mt-1"><span className="text-[9px] text-primary uppercase font-bold self-center text-left pl-1">Subtotal</span></div>
                     <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Massa" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
@@ -762,7 +763,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                     <label htmlFor="motivo-adjust" className={labelClass + " text-left pl-1"}>Motivo da Produção:</label>
                     <textarea
                       id="motivo-adjust"
-                      disabled
+                      disabled={!isProductionEditing}
                       className="w-full bg-surface/50 border-2 border-white/30 rounded-lg px-2 py-1 text-[10px] text-white disabled:opacity-60 outline-none focus:border-primary resize-none h-16"
                       placeholder="Descreva o motivo..."
                     ></textarea>
@@ -773,15 +774,15 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                     <div className="grid grid-cols-3 gap-2">
                       <div>
                         <span className={labelClass}>Médio</span>
-                        <input disabled aria-label="Ajuste Porcentagem Médio" className={inputClass} />
+                        <input disabled={!isProductionEditing} aria-label="Ajuste Porcentagem Médio" className={inputClass} />
                       </div>
                       <div>
                         <span className={labelClass}>Grande</span>
-                        <input disabled aria-label="Ajuste Porcentagem Grande" className={inputClass} />
+                        <input disabled={!isProductionEditing} aria-label="Ajuste Porcentagem Grande" className={inputClass} />
                       </div>
                       <div>
                         <span className={labelClass}>Família</span>
-                        <input disabled aria-label="Ajuste Porcentagem Família" className={inputClass} />
+                        <input disabled={!isProductionEditing} aria-label="Ajuste Porcentagem Família" className={inputClass} />
                       </div>
                     </div>
                   </div>
@@ -794,35 +795,39 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           </div>
         </div>
         {/* Custom Footer for Production Screen */}
-        <div className="p-3 border-t border-white/10 bg-slate-900/50 backdrop-blur-md shrink-0 grid grid-cols-2 md:flex md:justify-end gap-2">
+        <div className="p-2 border-t border-white/10 bg-slate-900/50 backdrop-blur-md shrink-0 grid grid-cols-2 md:flex md:justify-end gap-2">
           <button
-            onClick={() => { }}
+            onClick={() => setIsProductionEditing(true)}
+            disabled={isProductionEditing}
             title="Incluir novo mapa de produção"
-            className="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-green-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] active:scale-95 shadow-lg group"
+            className={`flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-green-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] active:scale-95 shadow-lg group ${isProductionEditing ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <Plus size={18} className="text-white group-hover:rotate-90 transition-transform" />
             <span className="font-bold text-xs uppercase tracking-wider">INCLUIR</span>
           </button>
           <button
-            onClick={() => { }}
+            onClick={() => setIsProductionEditing(false)}
+            disabled={!isProductionEditing}
             title="Salvar mapa de produção"
-            className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#e31837] to-[#ff4d6d] text-white py-3 px-8 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(227,24,55,0.4)] active:scale-95 shadow-lg group"
+            className={`flex items-center justify-center gap-2 bg-gradient-to-r from-[#e31837] to-[#ff4d6d] text-white py-3 px-8 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(227,24,55,0.4)] active:scale-95 shadow-lg group ${!isProductionEditing ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <Save size={18} className="text-white group-hover:rotate-12 transition-transform" />
             <span className="font-bold text-xs uppercase tracking-wider">SALVAR</span>
           </button>
           <button
             onClick={() => { }}
+            disabled={isProductionEditing}
             title="Consultar mapas de produção"
-            className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] active:scale-95 shadow-lg group"
+            className={`flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] active:scale-95 shadow-lg group ${isProductionEditing ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <Eye size={18} className="text-white group-hover:scale-110 transition-transform" />
             <span className="font-bold text-xs uppercase tracking-wider">CONSULTA</span>
           </button>
           <button
             onClick={() => { }}
+            disabled={isProductionEditing}
             title="Gerar relatório de produção"
-            className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(147,51,234,0.4)] active:scale-95 shadow-lg group"
+            className={`flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 px-6 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(147,51,234,0.4)] active:scale-95 shadow-lg group ${isProductionEditing ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <FileText size={18} className="text-white group-hover:scale-110 transition-transform" />
             <span className="font-bold text-xs uppercase tracking-wider">RELATÓRIO</span>
