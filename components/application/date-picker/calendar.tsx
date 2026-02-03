@@ -13,7 +13,7 @@ import {
     CalendarStateContext as AriaCalendarStateContext,
     Heading as AriaHeading,
     useSlottedContext,
-    Button as AriaButton,
+    Button,
 } from "react-aria-components";
 import { cx } from "@/utils/cx";
 import { CalendarCell } from "./cell";
@@ -63,19 +63,22 @@ export const Calendar = ({ highlightedDates, className, ...props }: CalendarProp
         <ContextWrapper>
             <AriaCalendar {...props} className={(state) => cx("flex flex-col gap-3", typeof className === "function" ? className(state) : className)}>
                 <header className="flex items-center justify-between">
-                    <AriaButton
+                    <Button
                         slot="previous"
-                        className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all hover:scale-110 border border-white/10 outline-none focus:ring-2 focus:ring-primary cursor-pointer"
+                        className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all hover:scale-110 border border-white/10 outline-none focus:ring-2 focus:ring-primary cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <ChevronLeft className="w-4 h-4" />
-                    </AriaButton>
-                    <AriaHeading className="text-sm font-semibold text-white capitalize" />
-                    <AriaButton
+                    </Button>
+                    <AriaHeading
+                        className="text-sm font-semibold text-white"
+                        style={{ textTransform: 'capitalize' }}
+                    />
+                    <Button
                         slot="next"
-                        className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all hover:scale-110 border border-white/10 outline-none focus:ring-2 focus:ring-primary cursor-pointer"
+                        className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all hover:scale-110 border border-white/10 outline-none focus:ring-2 focus:ring-primary cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <ChevronRight className="w-4 h-4" />
-                    </AriaButton>
+                    </Button>
                 </header>
 
                 <div className="flex gap-3">
