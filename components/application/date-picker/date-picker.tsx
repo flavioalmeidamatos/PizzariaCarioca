@@ -24,7 +24,7 @@ export const DatePicker = ({ value: valueProp, defaultValue, onChange, onApply, 
     });
     const [value, setValue] = useControlledState(valueProp, defaultValue || null, onChange);
 
-    const formattedDate = value ? formatter.format(value.toDate(getLocalTimeZone())) : "Select date";
+    const formattedDate = value ? formatter.format(value.toDate(getLocalTimeZone())) : "Selecione";
 
     return (
         <AriaDatePicker shouldCloseOnSelect={false} {...props} value={value} onChange={setValue}>
@@ -33,7 +33,7 @@ export const DatePicker = ({ value: valueProp, defaultValue, onChange, onApply, 
                     className="flex items-center gap-2 bg-slate-800/50 border-2 border-white/30 rounded-lg px-3 py-1.5 text-[10px] text-white hover:bg-slate-700/50 hover:border-primary/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed outline-none focus:border-primary shadow-lg cursor-pointer"
                 >
                     <CalendarIcon className="w-3 h-3 text-primary" />
-                    <span className="font-medium">{formattedDate}</span>
+                    <span className="font-medium capitalize">{formattedDate}</span>
                 </AriaButton>
             </AriaGroup>
             <AriaPopover
@@ -63,7 +63,7 @@ export const DatePicker = ({ value: valueProp, defaultValue, onChange, onApply, 
                                         close();
                                     }}
                                 >
-                                    Cancel
+                                    Cancelar
                                 </button>
                                 <button
                                     className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#e31837] to-[#ff4d6d] text-white py-2 px-4 rounded-lg transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(227,24,55,0.4)] active:scale-95 font-bold text-sm"
@@ -72,7 +72,7 @@ export const DatePicker = ({ value: valueProp, defaultValue, onChange, onApply, 
                                         close();
                                     }}
                                 >
-                                    Apply
+                                    Escolher
                                 </button>
                             </div>
                         </>
