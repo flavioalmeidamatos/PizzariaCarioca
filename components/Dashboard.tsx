@@ -625,6 +625,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               <input
                 type="date"
                 disabled
+                aria-labelledby="label-data-mapa"
                 className="bg-slate-900 border border-slate-700 rounded-lg py-1.5 pl-9 pr-3 text-xs text-white disabled:opacity-80 outline-none focus:border-primary transition-colors"
                 value="2024-02-03"
               />
