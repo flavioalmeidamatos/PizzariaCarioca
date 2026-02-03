@@ -619,7 +619,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         <div className="space-y-6">
           {/* Date Picker Row */}
           <div className="flex items-center gap-3 bg-slate-800/30 p-3 rounded-xl border border-white/5 w-fit">
-            <span className="text-[10px] uppercase font-bold text-slate-400">Data do Mapa:</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400" id="label-data-mapa">Data do Mapa:</span>
             <div className="relative">
               <Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-primary" />
               <input
@@ -647,39 +647,39 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
               {/* Row: MÉDIO */}
               <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
-              <div className="col-span-2"><input disabled value="0,350" className={inputClass} /></div>
-              <div className="col-span-2"><input disabled className={inputClass} /></div>
-              <div className="col-span-1"><input disabled className={inputClass} /></div>
-              <div className="col-span-2"><input disabled className={inputClass} /></div>
-              <div className="col-span-2"><input disabled value="0,040" className={inputClass} /></div>
-              <div className="col-span-2"><input disabled value="0,180" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Peso Médio" value="0,350" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Unidades Médio" className={inputClass} /></div>
+              <div className="col-span-1"><input disabled aria-label="Histórico Porcentagem Médio" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Peso Total Médio" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Molho Médio" value="0,040" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Muçarela Médio" value="0,180" className={inputClass} /></div>
 
               {/* Row: GRANDE */}
               <div className="col-span-1"><span className={rowLabelClass}>Grande</span></div>
-              <div className="col-span-2"><input disabled value="0,400" className={inputClass} /></div>
-              <div className="col-span-2"><input disabled className={inputClass} /></div>
-              <div className="col-span-1"><input disabled className={inputClass} /></div>
-              <div className="col-span-2"><input disabled className={inputClass} /></div>
-              <div className="col-span-2"><input disabled value="0,080" className={inputClass} /></div>
-              <div className="col-span-2"><input disabled value="0,250" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Peso Grande" value="0,400" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Unidades Grande" className={inputClass} /></div>
+              <div className="col-span-1"><input disabled aria-label="Histórico Porcentagem Grande" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Peso Total Grande" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Molho Grande" value="0,080" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Muçarela Grande" value="0,250" className={inputClass} /></div>
 
               {/* Row: FAMÍLIA */}
               <div className="col-span-1"><span className={rowLabelClass}>Família</span></div>
-              <div className="col-span-2"><input disabled value="0,450" className={inputClass} /></div>
-              <div className="col-span-2"><input disabled className={inputClass} /></div>
-              <div className="col-span-1"><input disabled className={inputClass} /></div>
-              <div className="col-span-2"><input disabled className={inputClass} /></div>
-              <div className="col-span-2"><input disabled value="0,100" className={inputClass} /></div>
-              <div className="col-span-2"><input disabled value="0,300" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Peso Família" value="0,450" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Unidades Família" className={inputClass} /></div>
+              <div className="col-span-1"><input disabled aria-label="Histórico Porcentagem Família" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Peso Total Família" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Molho Família" value="0,100" className={inputClass} /></div>
+              <div className="col-span-2"><input disabled aria-label="Histórico Muçarela Família" value="0,300" className={inputClass} /></div>
 
               {/* Row: SUBTOTAL */}
               <div className="col-span-1 mt-2"><span className="text-[10px] text-primary uppercase font-bold self-center text-left pl-2">Subtotal</span></div>
               <div className="col-span-2 mt-2 bg-slate-800/50 rounded-lg h-8"></div>
-              <div className="col-span-2 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
-              <div className="col-span-1 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
-              <div className="col-span-2 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
-              <div className="col-span-2 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
-              <div className="col-span-2 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+              <div className="col-span-2 mt-2"><input disabled aria-label="Subtotal Unidades Histórico" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+              <div className="col-span-1 mt-2"><input disabled aria-label="Subtotal Porcentagem Histórico" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+              <div className="col-span-2 mt-2"><input disabled aria-label="Subtotal Peso Histórico" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+              <div className="col-span-2 mt-2"><input disabled aria-label="Subtotal Molho Histórico" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+              <div className="col-span-2 mt-2"><input disabled aria-label="Subtotal Muçarela Histórico" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
             </div>
           </div>
 
@@ -697,22 +697,22 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                   <div className="col-span-1"><span className={labelClass}>Queijo</span></div>
 
                   <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Estoque Unds Médio" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Estoque Kg Médio" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Estoque Molho Médio" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Estoque Queijo Médio" className={inputClass} /></div>
 
                   <div className="col-span-1"><span className={rowLabelClass}>Grande</span></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Estoque Unds Grande" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Estoque Kg Grande" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Estoque Molho Grande" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Estoque Queijo Grande" className={inputClass} /></div>
 
                   <div className="col-span-1"><span className={rowLabelClass}>Família</span></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Estoque Unds Família" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Estoque Kg Família" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Estoque Molho Família" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Estoque Queijo Família" className={inputClass} /></div>
                 </div>
               </div>
 
@@ -726,24 +726,24 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                   <div className="col-span-1"><span className={labelClass}>Queijo</span></div>
 
                   <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Necessidade Massa Médio" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Necessidade Molho Médio" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Necessidade Queijo Médio" className={inputClass} /></div>
 
                   <div className="col-span-1"><span className={rowLabelClass}>Grande</span></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Necessidade Massa Grande" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Necessidade Molho Grande" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Necessidade Queijo Grande" className={inputClass} /></div>
 
                   <div className="col-span-1"><span className={rowLabelClass}>Família</span></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
-                  <div className="col-span-1"><input disabled className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Necessidade Massa Família" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Necessidade Molho Família" className={inputClass} /></div>
+                  <div className="col-span-1"><input disabled aria-label="Necessidade Queijo Família" className={inputClass} /></div>
 
                   <div className="col-span-1 mt-2"><span className="text-[10px] text-primary uppercase font-bold self-center text-left pl-2">Subtotal</span></div>
-                  <div className="col-span-1 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
-                  <div className="col-span-1 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
-                  <div className="col-span-1 mt-2"><input disabled className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+                  <div className="col-span-1 mt-2"><input disabled aria-label="Subtotal Necessidade Massa" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+                  <div className="col-span-1 mt-2"><input disabled aria-label="Subtotal Necessidade Molho" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
+                  <div className="col-span-1 mt-2"><input disabled aria-label="Subtotal Necessidade Queijo" className={`${inputClass} border-primary/30 bg-primary/5 text-primary font-bold`} /></div>
                 </div>
               </div>
             </div>
@@ -754,8 +754,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 <h3 className={sectionTitleClass}>Ajuste Produção</h3>
 
                 <div className="mb-6">
-                  <label className={labelClass + " text-left pl-1"}>Motivo da Produção:</label>
+                  <label htmlFor="motivo-adjust" className={labelClass + " text-left pl-1"}>Motivo da Produção:</label>
                   <textarea
+                    id="motivo-adjust"
                     disabled
                     className="w-full bg-surface/50 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white disabled:opacity-60 outline-none focus:border-primary resize-none h-24"
                     placeholder="Descreva o motivo..."
@@ -767,15 +768,15 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                   <div className="grid grid-cols-3 gap-3">
                     <div>
                       <span className={labelClass}>Médio</span>
-                      <input disabled className={inputClass} />
+                      <input disabled aria-label="Ajuste Porcentagem Médio" className={inputClass} />
                     </div>
                     <div>
                       <span className={labelClass}>Grande</span>
-                      <input disabled className={inputClass} />
+                      <input disabled aria-label="Ajuste Porcentagem Grande" className={inputClass} />
                     </div>
                     <div>
                       <span className={labelClass}>Família</span>
-                      <input disabled className={inputClass} />
+                      <input disabled aria-label="Ajuste Porcentagem Família" className={inputClass} />
                     </div>
                   </div>
                 </div>
