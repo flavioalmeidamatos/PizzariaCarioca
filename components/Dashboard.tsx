@@ -84,7 +84,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const handleDecimalBlur = (section: 'medio' | 'grande' | 'familia', field: 'peso' | 'molho' | 'queijo') => {
     let val = productionValues[section][field];
     if (!val) return;
-    
+
     val = val.replace(',', '.');
     let num = parseFloat(val);
     if (isNaN(num)) return;
@@ -646,7 +646,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   );
 
   const renderProduction = () => {
-    const inputClass = `w-full bg-surface/50 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-slate-300 ${isProductionEditing ? '' : 'disabled:opacity-60 disabled:cursor-not-allowed'} outline-none font-medium h-6`;
+    const inputClass = `w-full bg-surface/50 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-slate-300 ${isProductionEditing ? '' : 'disabled:opacity-60 disabled:cursor-not-allowed'} outline-none font-medium h-6`;
     const labelClass = "text-[9px] text-slate-400 uppercase font-bold text-center mb-0.5 block tracking-wider";
     const rowLabelClass = "text-[9px] text-slate-400 uppercase font-bold self-center text-left pl-1";
     const sectionTitleClass = "text-[10px] font-bold text-primary uppercase tracking-widest text-center mb-2 bg-slate-800/50 py-0.5 rounded-lg border-2 border-white/30";
@@ -718,11 +718,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 {/* Row: SUBTOTAL */}
                 <div className="col-span-1 mt-1"><span className="text-[9px] text-primary uppercase font-bold self-center text-left pl-1">Subtotal</span></div>
                 <div className="col-span-2 mt-1 bg-slate-800/50 rounded-lg h-6"></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Unidades Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Porcentagem Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Peso Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Molho Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Muçarela Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Unidades Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Porcentagem Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Peso Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Molho Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Muçarela Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
               </div>
             </div>
 
@@ -784,9 +784,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                     <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Queijo Família" className={inputClass} /></div>
 
                     <div className="col-span-1 mt-1"><span className="text-[9px] text-primary uppercase font-bold self-center text-left pl-1">Subtotal</span></div>
-                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Massa" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Molho" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Queijo" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Massa" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Molho" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Queijo" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
                   </div>
                 </div>
               </div>
