@@ -688,14 +688,14 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     const parseDecimal = (val: string) => parseFloat(val.replace(',', '.')) || 0;
 
     const totalMolho =
-      (unitsMedio * parseDecimal(productionValues.medio.molho)) +
-      (unitsGrande * parseDecimal(productionValues.grande.molho)) +
-      (unitsFamilia * parseDecimal(productionValues.familia.molho));
+      parseDecimal(productionValues.medio.molho) +
+      parseDecimal(productionValues.grande.molho) +
+      parseDecimal(productionValues.familia.molho);
 
     const totalQueijo =
-      (unitsMedio * parseDecimal(productionValues.medio.queijo)) +
-      (unitsGrande * parseDecimal(productionValues.grande.queijo)) +
-      (unitsFamilia * parseDecimal(productionValues.familia.queijo));
+      parseDecimal(productionValues.medio.queijo) +
+      parseDecimal(productionValues.grande.queijo) +
+      parseDecimal(productionValues.familia.queijo);
 
     const formatTotal = (val: number) => val.toFixed(3).replace('.', ',');
 
