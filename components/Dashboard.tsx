@@ -67,11 +67,13 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [isProductionEditing, setIsProductionEditing] = useState(false);
   const [productionDate, setProductionDate] = useState<DateValue | null>(today(getLocalTimeZone()));
 
-  const [productionValues, setProductionValues] = useState({
+  const PRODUCTION_DEFAULTS = {
     medio: { peso: '0,350', unidades: '', molho: '0,040', queijo: '0,180' },
     grande: { peso: '0,400', unidades: '', molho: '0,080', queijo: '0,250' },
     familia: { peso: '0,450', unidades: '', molho: '0,100', queijo: '0,300' }
-  });
+  };
+
+  const [productionValues, setProductionValues] = useState(PRODUCTION_DEFAULTS);
 
   const handleDecimalChange = (section: 'medio' | 'grande' | 'familia', field: 'peso' | 'molho' | 'queijo', value: string) => {
     if (!/^\d*,?\d{0,3}$/.test(value)) return;
@@ -83,11 +85,32 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
   const handleDecimalBlur = (section: 'medio' | 'grande' | 'familia', field: 'peso' | 'molho' | 'queijo') => {
     let val = productionValues[section][field];
-    if (!val) return;
+
+    // Auto-restore default if empty or invalid
+    if (!val || val.trim() === '' || val === ',') {
+      const defaultVal = PRODUCTION_DEFAULTS[section][field];
+      if (defaultVal) {
+        setProductionValues(prev => ({
+          ...prev,
+          [section]: { ...prev[section], [field]: defaultVal }
+        }));
+      }
+      return;
+    }
 
     val = val.replace(',', '.');
     let num = parseFloat(val);
-    if (isNaN(num)) return;
+    if (isNaN(num)) {
+      // If invalid number but not empty, restore default too
+      const defaultVal = PRODUCTION_DEFAULTS[section][field];
+      if (defaultVal) {
+        setProductionValues(prev => ({
+          ...prev,
+          [section]: { ...prev[section], [field]: defaultVal }
+        }));
+      }
+      return;
+    }
 
     const formatted = num.toFixed(3).replace('.', ',');
     setProductionValues(prev => ({
@@ -690,7 +713,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
                 {/* Row: MÉDIO */}
                 <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Médio" value={productionValues.medio.peso} onChange={(e) => handleDecimalChange('medio', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('medio', 'peso')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Médio" value={productionValues.medio.peso} onFocus={(e) => e.target.select()} onChange={(e) => handleDecimalChange('medio', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('medio', 'peso')} className={inputClass} /></div>
                 <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Médio" value={productionValues.medio.unidades} onChange={(e) => handleIntegerChange('medio', e.target.value)} className={inputClass} /></div>
                 <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Histórico Porcentagem Médio" className={inputClass} /></div>
                 <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Total Médio" className={inputClass} /></div>
@@ -699,7 +722,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
                 {/* Row: GRANDE */}
                 <div className="col-span-1"><span className={rowLabelClass}>Grande</span></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Grande" value={productionValues.grande.peso} onChange={(e) => handleDecimalChange('grande', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('grande', 'peso')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Grande" value={productionValues.grande.peso} onFocus={(e) => e.target.select()} onChange={(e) => handleDecimalChange('grande', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('grande', 'peso')} className={inputClass} /></div>
                 <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Grande" value={productionValues.grande.unidades} onChange={(e) => handleIntegerChange('grande', e.target.value)} className={inputClass} /></div>
                 <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Histórico Porcentagem Grande" className={inputClass} /></div>
                 <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Total Grande" className={inputClass} /></div>
@@ -708,7 +731,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
                 {/* Row: FAMÍLIA */}
                 <div className="col-span-1"><span className={rowLabelClass}>Família</span></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Família" value={productionValues.familia.peso} onChange={(e) => handleDecimalChange('familia', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('familia', 'peso')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Família" value={productionValues.familia.peso} onFocus={(e) => e.target.select()} onChange={(e) => handleDecimalChange('familia', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('familia', 'peso')} className={inputClass} /></div>
                 <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Família" value={productionValues.familia.unidades} onChange={(e) => handleIntegerChange('familia', e.target.value)} className={inputClass} /></div>
                 <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Histórico Porcentagem Família" className={inputClass} /></div>
                 <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Total Família" className={inputClass} /></div>
