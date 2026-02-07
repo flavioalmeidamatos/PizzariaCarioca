@@ -32,3 +32,8 @@ select option {
     background-color: #0f172a;
     color: white;
 }
+
+/* Dashboard Production Max Height */
+.max-h-production {
+    max-height: calc(100vh - 40px);
+}
