@@ -67,6 +67,43 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [isProductionEditing, setIsProductionEditing] = useState(false);
   const [productionDate, setProductionDate] = useState<DateValue | null>(today(getLocalTimeZone()));
 
+  const [productionValues, setProductionValues] = useState({
+    medio: { peso: '0,350', unidades: '', molho: '0,040', queijo: '0,180' },
+    grande: { peso: '0,400', unidades: '', molho: '0,080', queijo: '0,250' },
+    familia: { peso: '0,450', unidades: '', molho: '0,100', queijo: '0,300' }
+  });
+
+  const handleDecimalChange = (section: 'medio' | 'grande' | 'familia', field: 'peso' | 'molho' | 'queijo', value: string) => {
+    if (!/^\d*,?\d{0,3}$/.test(value)) return;
+    setProductionValues(prev => ({
+      ...prev,
+      [section]: { ...prev[section], [field]: value }
+    }));
+  };
+
+  const handleDecimalBlur = (section: 'medio' | 'grande' | 'familia', field: 'peso' | 'molho' | 'queijo') => {
+    let val = productionValues[section][field];
+    if (!val) return;
+
+    val = val.replace(',', '.');
+    let num = parseFloat(val);
+    if (isNaN(num)) return;
+
+    const formatted = num.toFixed(3).replace('.', ',');
+    setProductionValues(prev => ({
+      ...prev,
+      [section]: { ...prev[section], [field]: formatted }
+    }));
+  };
+
+  const handleIntegerChange = (section: 'medio' | 'grande' | 'familia', value: string) => {
+    if (!/^\d{0,4}$/.test(value)) return;
+    setProductionValues(prev => ({
+      ...prev,
+      [section]: { ...prev[section], unidades: value }
+    }));
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     onLogout();
@@ -609,7 +646,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   );
 
   const renderProduction = () => {
-    const inputClass = `w-full bg-surface/50 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-slate-300 ${isProductionEditing ? '' : 'disabled:opacity-60 disabled:cursor-not-allowed'} outline-none font-medium h-6`;
+    const inputClass = `w-full bg-surface/50 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-slate-300 ${isProductionEditing ? '' : 'disabled:opacity-60 disabled:cursor-not-allowed'} outline-none font-medium h-6`;
     const labelClass = "text-[9px] text-slate-400 uppercase font-bold text-center mb-0.5 block tracking-wider";
     const rowLabelClass = "text-[9px] text-slate-400 uppercase font-bold self-center text-left pl-1";
     const sectionTitleClass = "text-[10px] font-bold text-primary uppercase tracking-widest text-center mb-2 bg-slate-800/50 py-0.5 rounded-lg border-2 border-white/30";
@@ -653,39 +690,39 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
                 {/* Row: MÉDIO */}
                 <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Médio" value="0,350" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Médio" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Médio" value={productionValues.medio.peso} onChange={(e) => handleDecimalChange('medio', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('medio', 'peso')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Médio" value={productionValues.medio.unidades} onChange={(e) => handleIntegerChange('medio', e.target.value)} className={inputClass} /></div>
                 <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Histórico Porcentagem Médio" className={inputClass} /></div>
                 <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Total Médio" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Médio" value="0,040" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Médio" value="0,180" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Médio" value={productionValues.medio.molho} onChange={(e) => handleDecimalChange('medio', 'molho', e.target.value)} onBlur={() => handleDecimalBlur('medio', 'molho')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Médio" value={productionValues.medio.queijo} onChange={(e) => handleDecimalChange('medio', 'queijo', e.target.value)} onBlur={() => handleDecimalBlur('medio', 'queijo')} className={inputClass} /></div>
 
                 {/* Row: GRANDE */}
                 <div className="col-span-1"><span className={rowLabelClass}>Grande</span></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Grande" value="0,400" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Grande" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Grande" value={productionValues.grande.peso} onChange={(e) => handleDecimalChange('grande', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('grande', 'peso')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Grande" value={productionValues.grande.unidades} onChange={(e) => handleIntegerChange('grande', e.target.value)} className={inputClass} /></div>
                 <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Histórico Porcentagem Grande" className={inputClass} /></div>
                 <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Total Grande" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Grande" value="0,080" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Grande" value="0,250" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Grande" value={productionValues.grande.molho} onChange={(e) => handleDecimalChange('grande', 'molho', e.target.value)} onBlur={() => handleDecimalBlur('grande', 'molho')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Grande" value={productionValues.grande.queijo} onChange={(e) => handleDecimalChange('grande', 'queijo', e.target.value)} onBlur={() => handleDecimalBlur('grande', 'queijo')} className={inputClass} /></div>
 
                 {/* Row: FAMÍLIA */}
                 <div className="col-span-1"><span className={rowLabelClass}>Família</span></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Família" value="0,450" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Família" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Família" value={productionValues.familia.peso} onChange={(e) => handleDecimalChange('familia', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('familia', 'peso')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Família" value={productionValues.familia.unidades} onChange={(e) => handleIntegerChange('familia', e.target.value)} className={inputClass} /></div>
                 <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Histórico Porcentagem Família" className={inputClass} /></div>
                 <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Total Família" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Família" value="0,100" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Família" value="0,300" className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Família" value={productionValues.familia.molho} onChange={(e) => handleDecimalChange('familia', 'molho', e.target.value)} onBlur={() => handleDecimalBlur('familia', 'molho')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Família" value={productionValues.familia.queijo} onChange={(e) => handleDecimalChange('familia', 'queijo', e.target.value)} onBlur={() => handleDecimalBlur('familia', 'queijo')} className={inputClass} /></div>
 
                 {/* Row: SUBTOTAL */}
                 <div className="col-span-1 mt-1"><span className="text-[9px] text-primary uppercase font-bold self-center text-left pl-1">Subtotal</span></div>
                 <div className="col-span-2 mt-1 bg-slate-800/50 rounded-lg h-6"></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Unidades Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Porcentagem Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Peso Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Molho Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Muçarela Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Unidades Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Porcentagem Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Peso Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Molho Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Muçarela Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
               </div>
             </div>
 
@@ -747,9 +784,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                     <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Queijo Família" className={inputClass} /></div>
 
                     <div className="col-span-1 mt-1"><span className="text-[9px] text-primary uppercase font-bold self-center text-left pl-1">Subtotal</span></div>
-                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Massa" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Molho" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Queijo" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-right text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Massa" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Molho" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Queijo" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
                   </div>
                 </div>
               </div>
