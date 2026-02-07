@@ -100,8 +100,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
     val = val.replace(',', '.');
     let num = parseFloat(val);
-    if (isNaN(num)) {
-      // If invalid number but not empty, restore default too
+    if (isNaN(num) || num === 0) {
+      // If invalid number, 0, or not empty, restore default too
       const defaultVal = PRODUCTION_DEFAULTS[section][field];
       if (defaultVal) {
         setProductionValues(prev => ({
