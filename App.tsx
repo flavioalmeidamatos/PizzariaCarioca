@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { DevFieldTooltip } from './components/dev/DevFieldTooltip';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import { ViewState, PRELOADER_URL } from './types';
@@ -122,7 +121,6 @@ const App: React.FC = () => {
       ) : (
         <Dashboard onLogout={handleLogout} />
       )}
-      <DevFieldTooltip />
     </div>
   );
 };
