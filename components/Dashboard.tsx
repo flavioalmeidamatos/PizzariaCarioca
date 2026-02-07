@@ -685,6 +685,20 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       return ((val / total) * 100).toFixed(3).replace('.', ',');
     };
 
+    const parseDecimal = (val: string) => parseFloat(val.replace(',', '.')) || 0;
+
+    const totalMolho =
+      (unitsMedio * parseDecimal(productionValues.medio.molho)) +
+      (unitsGrande * parseDecimal(productionValues.grande.molho)) +
+      (unitsFamilia * parseDecimal(productionValues.familia.molho));
+
+    const totalQueijo =
+      (unitsMedio * parseDecimal(productionValues.medio.queijo)) +
+      (unitsGrande * parseDecimal(productionValues.grande.queijo)) +
+      (unitsFamilia * parseDecimal(productionValues.familia.queijo));
+
+    const formatTotal = (val: number) => val.toFixed(3).replace('.', ',');
+
     const pctMedio = formatPct(unitsMedio, totalHistoricalUnits);
     const pctGrande = formatPct(unitsGrande, totalHistoricalUnits);
     const pctFamilia = formatPct(unitsFamilia, totalHistoricalUnits);
@@ -760,8 +774,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Unidades Histórico" value={totalHistoricalUnits} className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-xs text-white disabled:opacity-80 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
                 <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Porcentagem Histórico" value={pctSubtotal} className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-xs text-white disabled:opacity-80 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
                 <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Peso Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-xs text-white disabled:opacity-80 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Molho Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-xs text-white disabled:opacity-80 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Muçarela Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-xs text-white disabled:opacity-80 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Molho Histórico" value={formatTotal(totalMolho)} className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-xs text-white disabled:opacity-80 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Muçarela Histórico" value={formatTotal(totalQueijo)} className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-xs text-white disabled:opacity-80 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
               </div>
             </div>
 
