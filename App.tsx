@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { DevFieldTooltip } from './components/dev/DevFieldTooltip';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import { ViewState, PRELOADER_URL } from './types';
 import { supabase } from './lib/supabase';
+
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>('login');
@@ -120,6 +122,7 @@ const App: React.FC = () => {
       ) : (
         <Dashboard onLogout={handleLogout} />
       )}
+      <DevFieldTooltip />
     </div>
   );
 };
