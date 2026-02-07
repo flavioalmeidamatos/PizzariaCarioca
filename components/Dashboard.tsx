@@ -669,10 +669,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   );
 
   const renderProduction = () => {
-    const inputClass = `w-full bg-surface/50 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-slate-300 ${isProductionEditing ? '' : 'disabled:opacity-60 disabled:cursor-not-allowed'} outline-none font-medium h-6`;
-    const labelClass = "text-[9px] text-slate-400 uppercase font-bold text-center mb-0.5 block tracking-wider";
-    const rowLabelClass = "text-[9px] text-slate-400 uppercase font-bold self-center text-left pl-1";
-    const sectionTitleClass = "text-[10px] font-bold text-primary uppercase tracking-widest text-center mb-2 bg-slate-800/50 py-0.5 rounded-lg border-2 border-white/30";
+    const inputClass = `w-full bg-surface/50 border-2 border-white/30 rounded-lg px-1 md:px-2 py-0.5 text-center text-[9px] md:text-[10px] text-slate-300 ${isProductionEditing ? '' : 'disabled:opacity-60 disabled:cursor-not-allowed'} outline-none font-medium h-6`;
+    const labelClass = "text-[8px] md:text-[9px] text-slate-400 uppercase font-bold text-center mb-0.5 block tracking-wider";
+    const rowLabelClass = "text-[8px] md:text-[9px] text-slate-400 uppercase font-bold self-center text-left pl-1";
+    const sectionTitleClass = "text-[9px] md:text-[10px] font-bold text-primary uppercase tracking-widest text-center mb-2 bg-slate-800/50 py-0.5 rounded-lg border-2 border-white/30";
 
     const unitsMedio = parseInt(productionValues.medio.unidades || '0', 10) || 0;
     const unitsGrande = parseInt(productionValues.grande.unidades || '0', 10) || 0;
@@ -987,10 +987,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
   return (
     <div className="bg-background-dark min-h-screen font-display text-slate-100 flex flex-col">
-      <div className="h-12 w-full bg-background-dark border-b border-slate-800 sticky top-0 z-50 flex items-center justify-between px-6 lg:hidden">
-        <span className="text-sm font-semibold text-white">9:41</span>
-        <div className="flex gap-2 items-center text-white"><Signal size={16} /><Wifi size={16} /><Battery size={16} /></div>
-      </div>
       <div className="flex flex-1 relative overflow-hidden">
         {isMobileMenuOpen && <div className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />}
         <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-surface border-r border-slate-800 flex flex-col transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
