@@ -675,7 +675,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     const sectionTitleClass = "text-[10px] font-bold text-primary uppercase tracking-widest text-center mb-2 bg-slate-800/50 py-0.5 rounded-lg border-2 border-white/30";
 
     return (
-      <div className="glass-effect flex flex-col w-full h-full rounded-[1.5rem] md:rounded-[2rem] border border-white/10 shadow-2xl relative z-10 animate-fade-in-up overflow-hidden" style={{ maxHeight: 'calc(100vh - 40px)' }}>
+      <div className="glass-effect flex flex-col w-full h-full rounded-[1.5rem] md:rounded-[2rem] border border-white/10 shadow-2xl relative z-10 animate-fade-in-up overflow-hidden max-h-production">
         <div className="flex items-center gap-3 md:gap-4 p-2 md:p-3 border-b border-white/10 shrink-0">
           <div className="p-2 bg-primary/20 rounded-xl text-primary border border-primary/20">
             <Calculator size={20} className="md:w-6 md:h-6" />
