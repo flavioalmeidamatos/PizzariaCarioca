@@ -67,11 +67,13 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [isProductionEditing, setIsProductionEditing] = useState(false);
   const [productionDate, setProductionDate] = useState<DateValue | null>(today(getLocalTimeZone()));
 
-  const [productionValues, setProductionValues] = useState({
+  const PRODUCTION_DEFAULTS = {
     medio: { peso: '0,350', unidades: '', molho: '0,040', queijo: '0,180' },
     grande: { peso: '0,400', unidades: '', molho: '0,080', queijo: '0,250' },
     familia: { peso: '0,450', unidades: '', molho: '0,100', queijo: '0,300' }
-  });
+  };
+
+  const [productionValues, setProductionValues] = useState(PRODUCTION_DEFAULTS);
 
   const handleDecimalChange = (section: 'medio' | 'grande' | 'familia', field: 'peso' | 'molho' | 'queijo', value: string) => {
     if (!/^\d*,?\d{0,3}$/.test(value)) return;
@@ -98,24 +100,29 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const handleDecimalBlur = (section: 'medio' | 'grande' | 'familia', field: 'peso' | 'molho' | 'queijo') => {
     let val = productionValues[section][field];
 
-    // If empty on blur, restore default value
-    if (!val) {
-      setProductionValues(prev => ({
-        ...prev,
-        [section]: { ...prev[section], [field]: DEFAULT_PRODUCTION_VALUES[section][field] }
-      }));
+    // Auto-restore default if empty or invalid
+    if (!val || val.trim() === '' || val === ',') {
+      const defaultVal = PRODUCTION_DEFAULTS[section][field];
+      if (defaultVal) {
+        setProductionValues(prev => ({
+          ...prev,
+          [section]: { ...prev[section], [field]: defaultVal }
+        }));
+      }
       return;
     }
 
     val = val.replace(',', '.');
     let num = parseFloat(val);
-
-    // If invalid number, restore default
-    if (isNaN(num)) {
-      setProductionValues(prev => ({
-        ...prev,
-        [section]: { ...prev[section], [field]: DEFAULT_PRODUCTION_VALUES[section][field] }
-      }));
+    if (isNaN(num) || num === 0) {
+      // If invalid number, 0, or not empty, restore default too
+      const defaultVal = PRODUCTION_DEFAULTS[section][field];
+      if (defaultVal) {
+        setProductionValues(prev => ({
+          ...prev,
+          [section]: { ...prev[section], [field]: defaultVal }
+        }));
+      }
       return;
     }
 
@@ -676,13 +683,50 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   );
 
   const renderProduction = () => {
-    const inputClass = `w-full bg-surface/50 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-slate-300 ${isProductionEditing ? '' : 'disabled:opacity-60 disabled:cursor-not-allowed'} outline-none font-medium h-6`;
-    const labelClass = "text-[9px] text-slate-400 uppercase font-bold text-center mb-0.5 block tracking-wider";
-    const rowLabelClass = "text-[9px] text-slate-400 uppercase font-bold self-center text-left pl-1";
-    const sectionTitleClass = "text-[10px] font-bold text-primary uppercase tracking-widest text-center mb-2 bg-slate-800/50 py-0.5 rounded-lg border-2 border-white/30";
+    const inputClass = `w-full bg-surface/50 border-2 border-white/30 rounded-lg px-0.5 md:px-2 py-0.5 text-center text-[8px] md:text-[10px] text-slate-300 ${isProductionEditing ? '' : 'disabled:opacity-60 disabled:cursor-not-allowed'} outline-none font-medium h-6`;
+    const labelClass = "text-[6px] md:text-[9px] text-slate-400 uppercase font-bold text-center mb-0.5 block tracking-wider leading-tight";
+    const rowLabelClass = "text-[7px] md:text-[9px] text-slate-400 uppercase font-bold self-center text-left pl-1";
+    const sectionTitleClass = "text-[9px] md:text-[10px] font-bold text-primary uppercase tracking-widest text-center mb-2 bg-slate-800/50 py-0.5 rounded-lg border-2 border-white/30";
+    const subtotalInputClass = "w-full bg-primary/5 border-2 border-white/30 rounded-lg px-0.5 md:px-2 py-0.5 text-center text-[9px] md:text-xs text-white disabled:opacity-80 disabled:cursor-not-allowed outline-none font-bold h-6";
+
+    const unitsMedio = parseInt(productionValues.medio.unidades || '0', 10) || 0;
+    const unitsGrande = parseInt(productionValues.grande.unidades || '0', 10) || 0;
+    const unitsFamilia = parseInt(productionValues.familia.unidades || '0', 10) || 0;
+
+    const totalHistoricalUnits = unitsMedio + unitsGrande + unitsFamilia;
+
+    const formatPct = (val: number, total: number) => {
+      if (!total) return '0,000';
+      return ((val / total) * 100).toFixed(3).replace('.', ',');
+    };
+
+    const parseDecimal = (val: string) => parseFloat(val.replace(',', '.')) || 0;
+
+    const totalMolho =
+      parseDecimal(productionValues.medio.molho) +
+      parseDecimal(productionValues.grande.molho) +
+      parseDecimal(productionValues.familia.molho);
+
+    const totalQueijo =
+      parseDecimal(productionValues.medio.queijo) +
+      parseDecimal(productionValues.grande.queijo) +
+      parseDecimal(productionValues.familia.queijo);
+
+    const pesoTotalMedio = unitsMedio * parseDecimal(productionValues.medio.peso);
+    const pesoTotalGrande = unitsGrande * parseDecimal(productionValues.grande.peso);
+    const pesoTotalFamilia = unitsFamilia * parseDecimal(productionValues.familia.peso);
+
+    const subtotalPeso = pesoTotalMedio + pesoTotalGrande + pesoTotalFamilia;
+
+    const formatTotal = (val: number) => val.toFixed(3).replace('.', ',');
+
+    const pctMedio = formatPct(unitsMedio, totalHistoricalUnits);
+    const pctGrande = formatPct(unitsGrande, totalHistoricalUnits);
+    const pctFamilia = formatPct(unitsFamilia, totalHistoricalUnits);
+    const pctSubtotal = totalHistoricalUnits > 0 ? '100,000' : '0,000';
 
     return (
-      <div className="glass-effect flex flex-col w-full h-full rounded-[1.5rem] md:rounded-[2rem] border border-white/10 shadow-2xl relative z-10 animate-fade-in-up overflow-hidden" style={{ maxHeight: 'calc(100vh - 40px)' }}>
+      <div className="glass-effect flex flex-col w-full h-full rounded-[1.5rem] md:rounded-[2rem] border border-white/10 shadow-2xl relative z-10 animate-fade-in-up overflow-hidden max-h-production">
         <div className="flex items-center gap-3 md:gap-4 p-2 md:p-3 border-b border-white/10 shrink-0">
           <div className="p-2 bg-primary/20 rounded-xl text-primary border border-primary/20">
             <Calculator size={20} className="md:w-6 md:h-6" />
@@ -720,39 +764,39 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
                 {/* Row: MÉDIO */}
                 <div className="col-span-1"><span className={rowLabelClass}>Médio</span></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Médio" value={productionValues.medio.peso} onFocus={() => handleFocus('medio', 'peso')} onChange={(e) => handleDecimalChange('medio', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('medio', 'peso')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Médio" value={productionValues.medio.peso} onFocus={(e) => e.target.select()} onChange={(e) => handleDecimalChange('medio', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('medio', 'peso')} className={inputClass} /></div>
                 <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Médio" value={productionValues.medio.unidades} onChange={(e) => handleIntegerChange('medio', e.target.value)} className={inputClass} /></div>
-                <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Histórico Porcentagem Médio" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Total Médio" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Médio" value={productionValues.medio.molho} onFocus={() => handleFocus('medio', 'molho')} onChange={(e) => handleDecimalChange('medio', 'molho', e.target.value)} onBlur={() => handleDecimalBlur('medio', 'molho')} className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Médio" value={productionValues.medio.queijo} onFocus={() => handleFocus('medio', 'queijo')} onChange={(e) => handleDecimalChange('medio', 'queijo', e.target.value)} onBlur={() => handleDecimalBlur('medio', 'queijo')} className={inputClass} /></div>
+                <div className="col-span-1"><input disabled aria-label="Histórico Porcentagem Médio" value={pctMedio} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled aria-label="Histórico Peso Total Médio" value={formatTotal(pesoTotalMedio)} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Médio" value={productionValues.medio.molho} onChange={(e) => handleDecimalChange('medio', 'molho', e.target.value)} onBlur={() => handleDecimalBlur('medio', 'molho')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Médio" value={productionValues.medio.queijo} onChange={(e) => handleDecimalChange('medio', 'queijo', e.target.value)} onBlur={() => handleDecimalBlur('medio', 'queijo')} className={inputClass} /></div>
 
                 {/* Row: GRANDE */}
                 <div className="col-span-1"><span className={rowLabelClass}>Grande</span></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Grande" value={productionValues.grande.peso} onFocus={() => handleFocus('grande', 'peso')} onChange={(e) => handleDecimalChange('grande', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('grande', 'peso')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Grande" value={productionValues.grande.peso} onFocus={(e) => e.target.select()} onChange={(e) => handleDecimalChange('grande', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('grande', 'peso')} className={inputClass} /></div>
                 <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Grande" value={productionValues.grande.unidades} onChange={(e) => handleIntegerChange('grande', e.target.value)} className={inputClass} /></div>
-                <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Histórico Porcentagem Grande" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Total Grande" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Grande" value={productionValues.grande.molho} onFocus={() => handleFocus('grande', 'molho')} onChange={(e) => handleDecimalChange('grande', 'molho', e.target.value)} onBlur={() => handleDecimalBlur('grande', 'molho')} className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Grande" value={productionValues.grande.queijo} onFocus={() => handleFocus('grande', 'queijo')} onChange={(e) => handleDecimalChange('grande', 'queijo', e.target.value)} onBlur={() => handleDecimalBlur('grande', 'queijo')} className={inputClass} /></div>
+                <div className="col-span-1"><input disabled aria-label="Histórico Porcentagem Grande" value={pctGrande} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled aria-label="Histórico Peso Total Grande" value={formatTotal(pesoTotalGrande)} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Grande" value={productionValues.grande.molho} onChange={(e) => handleDecimalChange('grande', 'molho', e.target.value)} onBlur={() => handleDecimalBlur('grande', 'molho')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Grande" value={productionValues.grande.queijo} onChange={(e) => handleDecimalChange('grande', 'queijo', e.target.value)} onBlur={() => handleDecimalBlur('grande', 'queijo')} className={inputClass} /></div>
 
                 {/* Row: FAMÍLIA */}
                 <div className="col-span-1"><span className={rowLabelClass}>Família</span></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Família" value={productionValues.familia.peso} onFocus={() => handleFocus('familia', 'peso')} onChange={(e) => handleDecimalChange('familia', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('familia', 'peso')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Família" value={productionValues.familia.peso} onFocus={(e) => e.target.select()} onChange={(e) => handleDecimalChange('familia', 'peso', e.target.value)} onBlur={() => handleDecimalBlur('familia', 'peso')} className={inputClass} /></div>
                 <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Unidades Família" value={productionValues.familia.unidades} onChange={(e) => handleIntegerChange('familia', e.target.value)} className={inputClass} /></div>
-                <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Histórico Porcentagem Família" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Peso Total Família" className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Família" value={productionValues.familia.molho} onFocus={() => handleFocus('familia', 'molho')} onChange={(e) => handleDecimalChange('familia', 'molho', e.target.value)} onBlur={() => handleDecimalBlur('familia', 'molho')} className={inputClass} /></div>
-                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Família" value={productionValues.familia.queijo} onFocus={() => handleFocus('familia', 'queijo')} onChange={(e) => handleDecimalChange('familia', 'queijo', e.target.value)} onBlur={() => handleDecimalBlur('familia', 'queijo')} className={inputClass} /></div>
+                <div className="col-span-1"><input disabled aria-label="Histórico Porcentagem Família" value={pctFamilia} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled aria-label="Histórico Peso Total Família" value={formatTotal(pesoTotalFamilia)} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Molho Família" value={productionValues.familia.molho} onChange={(e) => handleDecimalChange('familia', 'molho', e.target.value)} onBlur={() => handleDecimalBlur('familia', 'molho')} className={inputClass} /></div>
+                <div className="col-span-2"><input disabled={!isProductionEditing} aria-label="Histórico Muçarela Família" value={productionValues.familia.queijo} onChange={(e) => handleDecimalChange('familia', 'queijo', e.target.value)} onBlur={() => handleDecimalBlur('familia', 'queijo')} className={inputClass} /></div>
 
                 {/* Row: SUBTOTAL */}
-                <div className="col-span-1 mt-1"><span className="text-[9px] text-primary uppercase font-bold self-center text-left pl-1">Subtotal</span></div>
+                <div className="col-span-1 mt-1"><span className="text-[7px] md:text-[9px] text-primary uppercase font-bold self-center text-left pl-1">Subtotal</span></div>
                 <div className="col-span-2 mt-1 bg-slate-800/50 rounded-lg h-6"></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Unidades Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Porcentagem Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Peso Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Molho Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Muçarela Histórico" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Unidades Histórico" value={totalHistoricalUnits} className={subtotalInputClass} /></div>
+                <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Porcentagem Histórico" value={pctSubtotal} className={subtotalInputClass} /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Peso Histórico" value={formatTotal(subtotalPeso)} className={subtotalInputClass} /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Molho Histórico" value={formatTotal(totalMolho)} className={subtotalInputClass} /></div>
+                <div className="col-span-2 mt-1"><input disabled aria-label="Subtotal Muçarela Histórico" value={formatTotal(totalQueijo)} className={subtotalInputClass} /></div>
               </div>
             </div>
 
@@ -813,10 +857,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                     <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Molho Família" className={inputClass} /></div>
                     <div className="col-span-1"><input disabled={!isProductionEditing} aria-label="Necessidade Queijo Família" className={inputClass} /></div>
 
-                    <div className="col-span-1 mt-1"><span className="text-[9px] text-primary uppercase font-bold self-center text-left pl-1">Subtotal</span></div>
-                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Massa" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Molho" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
-                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Queijo" className="w-full bg-primary/5 border-2 border-white/30 rounded-lg px-2 py-0.5 text-center text-[10px] text-primary disabled:opacity-60 disabled:cursor-not-allowed outline-none font-bold h-6" /></div>
+                    <div className="col-span-1 mt-1"><span className="text-[7px] md:text-[9px] text-primary uppercase font-bold self-center text-left pl-1">Subtotal</span></div>
+                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Massa" className={subtotalInputClass} /></div>
+                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Molho" className={subtotalInputClass} /></div>
+                    <div className="col-span-1 mt-1"><input disabled aria-label="Subtotal Necessidade Queijo" className={subtotalInputClass} /></div>
                   </div>
                 </div>
               </div>
@@ -958,10 +1002,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
   return (
     <div className="bg-background-dark min-h-screen font-display text-slate-100 flex flex-col">
-      <div className="h-12 w-full bg-background-dark border-b border-slate-800 sticky top-0 z-50 flex items-center justify-between px-6 lg:hidden">
-        <span className="text-sm font-semibold text-white">9:41</span>
-        <div className="flex gap-2 items-center text-white"><Signal size={16} /><Wifi size={16} /><Battery size={16} /></div>
-      </div>
       <div className="flex flex-1 relative overflow-hidden">
         {isMobileMenuOpen && <div className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />}
         <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-surface border-r border-slate-800 flex flex-col transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
